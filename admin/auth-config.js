@@ -10,7 +10,7 @@
    ============================================================ */
 window.BX_ADMIN_AUTH = {
   salt: "bx-admin-salt-v1",
-  loginHash: "bb2a00141c0cc3671326cd1c2b821d07ad2d76c409cdc2c1070c1710c408be39",
-  passHash: "2c961e79d313825b72d14fcb8e445dc1ad8516ab4af289d3091490a398ad7ff9",
-  loginName: "LogLirikaw"
+  loginHash: "REPLACE_ME_LOGIN_HASH",
+  passHash: "REPLACE_ME_PASS_HASH",
+  loginName: "admin"
 };

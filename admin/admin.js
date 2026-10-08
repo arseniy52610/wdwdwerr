@@ -271,6 +271,7 @@
     pricing: ["ТАРИФЫ", "Статистика переходов к тарифам"],
     users: ["ПОЛЬЗОВАТЕЛИ", "Список посетителей сайта"],
     events: ["СОБЫТИЯ", "Полный журнал действий на сайте"],
+    support: ["ПОДДЕРЖКА", "Обращения посетителей в реальном времени"],
     settings: ["НАСТРОЙКИ", "Параметры админ-панели и доступа"]
   };
 
@@ -1175,6 +1176,9 @@
     pricing: renderPricing,
     users: renderUsers,
     events: renderEvents,
+    support: function () {
+      if (window.BX_SUPPORT && typeof window.BX_SUPPORT.render === "function") window.BX_SUPPORT.render();
+    },
     settings: renderSettings
   };
 
@@ -1217,6 +1221,7 @@
 
   function renderCurrent() {
     if (state.view === "settings") { RENDERERS.settings(); return; }
+    if (state.view === "support") { RENDERERS.support(); return; }
     if (!state.data) return;
     RENDERERS[state.view]();
   }
@@ -1235,7 +1240,7 @@
     });
     $("viewTitle").textContent = TITLES[name][0];
     $("viewSub").textContent = TITLES[name][1];
-    $("topTools").style.display = name === "settings" ? "none" : "";
+    $("topTools").style.display = (name === "settings" || name === "support") ? "none" : "";
     window.scrollTo({ top: 0, behavior: "smooth" });
     renderCurrent();
   }
