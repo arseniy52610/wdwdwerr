@@ -499,7 +499,7 @@
       var k = v / 1000;
       return (k % 1 === 0 ? k : k.toFixed(1)) + "K";
     }
-    return String(v);
+    return String(+(+v).toFixed(2));
   }
 
   function smoothPath(pts) {
@@ -517,10 +517,20 @@
 
   var gradSeq = 0;
 
+  function chartPalette() {
+    if (document.documentElement.getAttribute("data-theme") === "light") {
+      return { g0: "rgba(0,0,0,0.13)", g1: "rgba(0,0,0,0)", grid: "rgba(0,0,0,0.08)",
+        text: "#6b7280", line: "#14161a", dotFill: "#ffffff", dotStroke: "#14161a" };
+    }
+    return { g0: "rgba(255,255,255,0.16)", g1: "rgba(255,255,255,0)", grid: "rgba(255,255,255,0.07)",
+      text: "#5f656e", line: "#ffffff", dotFill: "#000000", dotStroke: "#ffffff" };
+  }
+
   function lineChart(el, labels, values, opts) {
     opts = opts || {};
     if (!el) return;
     var gid = "areaGrad" + (++gradSeq);
+    var pal = chartPalette();
     var w = el.clientWidth || 640;
     var h = el.clientHeight || 275;
     var padL = 46, padR = 14, padT = 16, padB = 30;
@@ -542,8 +552,8 @@
     var svg = [];
     svg.push('<svg viewBox="0 0 ' + w + " " + h + '" preserveAspectRatio="none" role="img">');
     svg.push("<defs><linearGradient id=\"" + gid + "\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\">" +
-      '<stop offset="0%" stop-color="rgba(255,255,255,0.16)"/>' +
-      '<stop offset="100%" stop-color="rgba(255,255,255,0)"/>' +
+      '<stop offset="0%" stop-color="' + pal.g0 + '"/>' +
+      '<stop offset="100%" stop-color="' + pal.g1 + '"/>' +
       "</linearGradient></defs>");
 
     var gridN = 5;
@@ -551,26 +561,26 @@
       var val = (max / gridN) * g;
       var y = padT + plotH - (g / gridN) * plotH;
       svg.push('<line x1="' + padL + '" y1="' + y.toFixed(1) + '" x2="' + (w - padR) + '" y2="' + y.toFixed(1) +
-        '" stroke="rgba(255,255,255,0.07)" stroke-dasharray="4 5"/>');
-      svg.push('<text x="' + (padL - 10) + '" y="' + (y + 4).toFixed(1) + '" text-anchor="end" fill="#5f656e" font-size="11">' + fmtAxis(val) + "</text>");
+        '" stroke="' + pal.grid + '" stroke-dasharray="4 5"/>');
+      svg.push('<text x="' + (padL - 10) + '" y="' + (y + 4).toFixed(1) + '" text-anchor="end" fill="' + pal.text + '" font-size="11">' + fmtAxis(val) + "</text>");
     }
 
     var lineD = smoothPath(pts);
     var areaD = lineD + " L" + pts[n - 1][0].toFixed(1) + "," + (padT + plotH) + " L" + pts[0][0].toFixed(1) + "," + (padT + plotH) + " Z";
     svg.push('<path d="' + areaD + '" fill="url(#' + gid + ')"/>');
-    svg.push('<path d="' + lineD + '" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>');
+    svg.push('<path d="' + lineD + '" fill="none" stroke="' + pal.line + '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>');
 
     var every = Math.ceil(n / 8);
     for (var i = 0; i < n; i++) {
       if (i % every === 0 || i === n - 1) {
-        svg.push('<text x="' + pts[i][0].toFixed(1) + '" y="' + (h - 8) + '" text-anchor="middle" fill="#5f656e" font-size="11">' +
+        svg.push('<text x="' + pts[i][0].toFixed(1) + '" y="' + (h - 8) + '" text-anchor="middle" fill="' + pal.text + '" font-size="11">' +
           esc(fmtDayShort(labels[i])) + "</text>");
       }
     }
 
     for (i = 0; i < n; i++) {
       var px = pts[i][0], py = pts[i][1];
-      svg.push('<circle cx="' + px.toFixed(1) + '" cy="' + py.toFixed(1) + '" r="3" fill="#000" stroke="#fff" stroke-width="1.6"/>');
+      svg.push('<circle cx="' + px.toFixed(1) + '" cy="' + py.toFixed(1) + '" r="3" fill="' + pal.dotFill + '" stroke="' + pal.dotStroke + '" stroke-width="1.6"/>');
       var hitW = n > 1 ? stepX : plotW;
       var hx = n > 1 ? px - hitW / 2 : padL;
       svg.push('<rect class="hit" data-i="' + i + '" x="' + hx.toFixed(1) + '" y="' + padT + '" width="' + hitW.toFixed(1) +
@@ -1035,7 +1045,7 @@
       '<div class="card"><div class="card__head">' +
         "<div><h3>Все события</h3><p>Найдено: " + nf(all.length) + "</p></div>" +
         '<div class="btn-row">' +
-          '<input id="eventsSearch" placeholder="Поиск..." value="' + esc(eventsQuery) + '" style="background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:9px;padding:8px 12px;color:#fff;outline:none;font-size:13px;min-width:190px">' +
+          '<input id="eventsSearch" placeholder="Поиск..." value="' + esc(eventsQuery) + '" style="background:var(--w04);border:1px solid var(--border);border-radius:9px;padding:8px 12px;color:var(--text);outline:none;font-size:13px;min-width:190px">' +
           '<button class="linkbtn" id="eventsMore">Показать ещё</button>' +
           '<button class="linkbtn" id="eventsExport">Экспорт CSV</button>' +
         "</div></div>" +
@@ -1263,6 +1273,13 @@
     $("logoutBtn").addEventListener("click", logout);
     $("gearBtn").addEventListener("click", function () { setView("settings"); });
 
+    $("themeBtn").addEventListener("click", function () {
+      var next = document.documentElement.getAttribute("data-theme") === "light" ? "dark" : "light";
+      document.documentElement.setAttribute("data-theme", next);
+      try { localStorage.setItem("bx_theme", next); } catch (e) {}
+      renderCurrent();
+    });
+
     $("sideNav").addEventListener("click", function (e) {
       var b = e.target.closest(".navitem");
       if (b) setView(b.getAttribute("data-view"));
@@ -1317,6 +1334,13 @@
   }
 
   /* ================= BOOT ================= */
+
+  try {
+    var th = localStorage.getItem("bx_theme");
+    document.documentElement.setAttribute("data-theme", th === "light" ? "light" : "dark");
+  } catch (e) {
+    document.documentElement.setAttribute("data-theme", "dark");
+  }
 
   initLogin();
 
