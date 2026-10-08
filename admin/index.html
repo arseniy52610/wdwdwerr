@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#050505">
+  <link rel="icon" type="image/png" href="../logo.png">
+  <title>Админ-панель — BYNEXVPN</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+  <!-- ================= LOGIN ================= -->
+  <div class="login" id="loginScreen">
+    <div class="login__glow" aria-hidden="true"></div>
+    <div class="login__box">
+      <div class="login__logo">
+        <svg viewBox="0 0 32 32" fill="none" aria-hidden="true">
+          <path d="M9 27V5h8.5a7.5 7.5 0 0 1 0 15H13" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M15.5 19.5L25 28" stroke="currentColor" stroke-width="3.2" stroke-linecap="round"/>
+        </svg>
+        <span>BYNEXVPN</span>
+      </div>
+      <h1 id="loginTitle">Вход в админ-панель</h1>
+      <p class="login__sub" id="loginSub">Аналитика и статистика вашего сайта</p>
+      <form id="loginForm" autocomplete="off">
+        <label class="field">
+          <span>Логин</span>
+          <input type="text" id="loginUser" autocomplete="username" spellcheck="false" placeholder="Введите логин">
+        </label>
+        <label class="field">
+          <span>Пароль</span>
+          <input type="password" id="loginPass" autocomplete="current-password" placeholder="Введите пароль">
+        </label>
+        <button type="submit" class="login__btn" id="loginBtn">Войти</button>
+        <p class="login__error" id="loginError" role="alert"></p>
+      </form>
+      <form id="setupForm" autocomplete="off" hidden>
+        <label class="field">
+          <span>Логин</span>
+          <input type="text" id="setupUser" autocomplete="off" spellcheck="false" placeholder="Придумайте логин">
+        </label>
+        <label class="field">
+          <span>Пароль</span>
+          <input type="password" id="setupPass" autocomplete="new-password" placeholder="Не менее 6 символов">
+        </label>
+        <label class="field">
+          <span>Повторите пароль</span>
+          <input type="password" id="setupPass2" autocomplete="new-password" placeholder="Ещё раз">
+        </label>
+        <button type="submit" class="login__btn" id="setupBtn">Создать доступ</button>
+        <p class="login__error" id="setupError" role="alert"></p>
+      </form>
+      <p class="login__note" id="loginNote">Доступ ограничен. Все попытки входа проверяются по хешу.</p>
+    </div>
+  </div>
+
+  <!-- ================= APP ================= -->
+  <div class="app" id="app" hidden>
+    <div class="decor" aria-hidden="true">
+      <span class="decor__arc decor__arc--tr"></span>
+      <span class="decor__planet decor__planet--bl"></span>
+      <span class="decor__arc decor__arc--bl"></span>
+    </div>
+
+    <aside class="side">
+      <div class="side__logo">
+        <svg viewBox="0 0 32 32" fill="none" aria-hidden="true">
+          <path d="M9 27V5h8.5a7.5 7.5 0 0 1 0 15H13" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M15.5 19.5L25 28" stroke="currentColor" stroke-width="3.2" stroke-linecap="round"/>
+        </svg>
+        <span>BYNEXVPN</span>
+      </div>
+
+      <nav class="side__nav" id="sideNav">
+        <button class="navitem is-active" data-view="dashboard">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M3.5 10.5L12 3.5l8.5 7v9a1.5 1.5 0 0 1-1.5 1.5h-4.5v-6h-5v6H5a1.5 1.5 0 0 1-1.5-1.5v-9z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+          Главная
+        </button>
+        <button class="navitem" data-view="visitors">
+          <svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3.4" stroke="currentColor" stroke-width="1.5"/><path d="M2.8 19.5c0-3.4 2.9-5.6 6.2-5.6s6.2 2.2 6.2 5.6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M16.2 5.2a3.2 3.2 0 0 1 0 5.9M18 14.4c1.9.7 3.2 2.4 3.2 4.6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Посетители
+        </button>
+        <button class="navitem" data-view="clicks">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M6.5 3.5l11 6.7-4.6 1.2-1.4 4.7-5-12.6z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M13.5 13.5l5 5.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Клики
+        </button>
+        <button class="navitem" data-view="pages">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M6 3.5h7.5L18.5 8v12.5H6V3.5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M13.5 3.5V8h5M9 12.5h6M9 16h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Страницы
+        </button>
+        <button class="navitem" data-view="pricing">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 3l7.5 3.2v5.1c0 4.7-3.2 8.7-7.5 10.3-4.3-1.6-7.5-5.6-7.5-10.3V6.2L12 3z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M8.8 12.1l2.3 2.3 4.1-4.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Тарифы
+        </button>
+        <button class="navitem" data-view="users">
+          <svg viewBox="0 0 24 24" fill="none"><circle cx="8.5" cy="8" r="3.2" stroke="currentColor" stroke-width="1.5"/><circle cx="16.8" cy="9.5" r="2.4" stroke="currentColor" stroke-width="1.5"/><path d="M2.6 19c0-3.2 2.7-5.3 5.9-5.3s5.9 2.1 5.9 5.3M15.5 14.2c2.9 0 5.9 1.6 5.9 4.8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Пользователи
+        </button>
+        <button class="navitem" data-view="events">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M9 6h11M9 12h11M9 18h11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="4.5" cy="6" r="1.3" fill="currentColor"/><circle cx="4.5" cy="12" r="1.3" fill="currentColor"/><circle cx="4.5" cy="18" r="1.3" fill="currentColor"/></svg>
+          События
+        </button>
+        <button class="navitem" data-view="settings">
+          <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3.1" stroke="currentColor" stroke-width="1.5"/><path d="M19.1 14.9a1.6 1.6 0 0 0 .32 1.77l.06.06a1.94 1.94 0 1 1-2.75 2.75l-.06-.06a1.6 1.6 0 0 0-1.77-.32 1.6 1.6 0 0 0-.97 1.47v.17a1.94 1.94 0 1 1-3.88 0v-.09a1.6 1.6 0 0 0-1.04-1.46 1.6 1.6 0 0 0-1.77.32l-.06.06a1.94 1.94 0 1 1-2.75-2.75l.06-.06a1.6 1.6 0 0 0 .32-1.77 1.6 1.6 0 0 0-1.47-.97H3.1a1.94 1.94 0 1 1 0-3.88h.09a1.6 1.6 0 0 0 1.46-1.04 1.6 1.6 0 0 0-.32-1.77l-.06-.06a1.94 1.94 0 1 1 2.75-2.75l.06.06a1.6 1.6 0 0 0 1.77.32h.08a1.6 1.6 0 0 0 .97-1.47V3.1a1.94 1.94 0 1 1 3.88 0v.09a1.6 1.6 0 0 0 .97 1.47 1.6 1.6 0 0 0 1.77-.32l.06-.06a1.94 1.94 0 1 1 2.75 2.75l-.06.06a1.6 1.6 0 0 0-.32 1.77v.08a1.6 1.6 0 0 0 1.47.97h.17a1.94 1.94 0 1 1 0 3.88h-.09a1.6 1.6 0 0 0-1.47.97z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>
+          Настройки
+        </button>
+      </nav>
+
+      <div class="side__foot">
+        <div class="sys">
+          <span class="sys__dot"></span>
+          <div>
+            <strong>Система работает</strong>
+            <span>Последнее обновление<br><b id="lastUpdate">—</b></span>
+          </div>
+        </div>
+        <button class="logout" id="logoutBtn">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M9.5 4.5H5.5a1.5 1.5 0 0 0-1.5 1.5v12a1.5 1.5 0 0 0 1.5 1.5h4M14 8l4 4-4 4M9 12h9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Выйти
+        </button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="top">
+        <div class="top__head">
+          <div>
+            <h1 id="viewTitle">ПАНЕЛЬ АДМИНИСТРАТОРА</h1>
+            <p id="viewSub">Аналитика и статистика вашего сайта</p>
+          </div>
+          <div class="top__right">
+            <div class="userchip">
+              <span class="userchip__ico">
+                <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8.5" r="3.6" stroke="currentColor" stroke-width="1.6"/><path d="M4.8 20c0-3.7 3.2-6 7.2-6s7.2 2.3 7.2 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+              </span>
+              <div>
+                <strong id="userChipName">admin</strong>
+                <span>Администратор</span>
+              </div>
+            </div>
+            <button class="iconbtn" id="gearBtn" title="Настройки">
+              <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3.1" stroke="currentColor" stroke-width="1.5"/><path d="M19.1 14.9a1.6 1.6 0 0 0 .32 1.77l.06.06a1.94 1.94 0 1 1-2.75 2.75l-.06-.06a1.6 1.6 0 0 0-1.77-.32 1.6 1.6 0 0 0-.97 1.47v.17a1.94 1.94 0 1 1-3.88 0v-.09a1.6 1.6 0 0 0-1.04-1.46 1.6 1.6 0 0 0-1.77.32l-.06.06a1.94 1.94 0 1 1-2.75-2.75l.06-.06a1.6 1.6 0 0 0 .32-1.77 1.6 1.6 0 0 0-1.47-.97H3.1a1.94 1.94 0 1 1 0-3.88h.09a1.6 1.6 0 0 0 1.46-1.04 1.6 1.6 0 0 0-.32-1.77l-.06-.06a1.94 1.94 0 1 1 2.75-2.75l.06.06a1.6 1.6 0 0 0 1.77.32h.08a1.6 1.6 0 0 0 .97-1.47V3.1a1.94 1.94 0 1 1 3.88 0v.09a1.6 1.6 0 0 0 .97 1.47 1.6 1.6 0 0 0 1.77-.32l.06-.06a1.94 1.94 0 1 1 2.75 2.75l-.06.06a1.6 1.6 0 0 0-.32 1.77v.08a1.6 1.6 0 0 0 1.47.97h.17a1.94 1.94 0 1 1 0 3.88h-.09a1.6 1.6 0 0 0-1.47.97z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="top__tools" id="topTools">
+          <div class="daterange">
+            <svg viewBox="0 0 24 24" fill="none"><rect x="3.5" y="5" width="17" height="15.5" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M3.5 9.5h17M8 3.5v3M16 3.5v3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            <input type="date" id="dateFrom" aria-label="Дата начала">
+            <span class="daterange__sep">—</span>
+            <input type="date" id="dateTo" aria-label="Дата окончания">
+          </div>
+          <div class="presets" id="presets">
+            <button class="is-active" data-days="7">7 дней</button>
+            <button data-days="30">30 дней</button>
+            <button data-days="90">90 дней</button>
+          </div>
+        </div>
+      </header>
+
+      <div class="notice" id="setupNotice" hidden>
+        <strong>Статистика ещё не подключена.</strong>
+        Создайте проект на supabase.com, выполните SQL из <code>admin/schema.sql</code> и впишите
+        Project URL и anon key в файл <code>supabase-config.js</code> в корне сайта.
+      </div>
+
+      <div class="notice" id="authNotice" hidden></div>
+
+      <div class="notice notice--err" id="errorNotice" hidden></div>
+
+      <!-- ============ DASHBOARD ============ -->
+      <section class="view" data-view="dashboard">
+        <div class="stats">
+          <div class="card stat">
+            <div class="stat__head">
+              <span class="stat__ico"><svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3.4" stroke="currentColor" stroke-width="1.5"/><path d="M2.8 19.5c0-3.4 2.9-5.6 6.2-5.6s6.2 2.2 6.2 5.6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M16.2 5.2a3.2 3.2 0 0 1 0 5.9M18 14.4c1.9.7 3.2 2.4 3.2 4.6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+              <span class="stat__label">Уникальные посетители</span>
+            </div>
+            <div class="stat__row">
+              <strong class="stat__val" id="mUniq">—</strong>
+              <span class="delta" id="dUniq"></span>
+            </div>
+            <span class="stat__hint">за выбранный период</span>
+          </div>
+
+          <div class="card stat">
+            <div class="stat__head">
+              <span class="stat__ico"><svg viewBox="0 0 24 24" fill="none"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.5"/></svg></span>
+              <span class="stat__label">Просмотры страниц</span>
+            </div>
+            <div class="stat__row">
+              <strong class="stat__val" id="mViews">—</strong>
+              <span class="delta" id="dViews"></span>
+            </div>
+            <span class="stat__hint">за выбранный период</span>
+          </div>
+
+          <div class="card stat">
+            <div class="stat__head">
+              <span class="stat__ico"><svg viewBox="0 0 24 24" fill="none"><path d="M6.5 3.5l11 6.7-4.6 1.2-1.4 4.7-5-12.6z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M13.5 13.5l5 5.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+              <span class="stat__label">Клики по кнопкам</span>
+            </div>
+            <div class="stat__row">
+              <strong class="stat__val" id="mClicks">—</strong>
+              <span class="delta" id="dClicks"></span>
+            </div>
+            <span class="stat__hint">за выбранный период</span>
+          </div>
+
+          <div class="card stat">
+            <div class="stat__head">
+              <span class="stat__ico"><svg viewBox="0 0 24 24" fill="none"><circle cx="10" cy="8" r="3.5" stroke="currentColor" stroke-width="1.5"/><path d="M3.5 19.5c0-3.5 3-5.7 6.5-5.7 1.4 0 2.7.35 3.8 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M14.5 17.8l2 2 4-4.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              <span class="stat__label">Активные посетители</span>
+            </div>
+            <div class="stat__row">
+              <strong class="stat__val" id="mOnline">—</strong>
+              <span class="delta delta--live"><i></i>онлайн</span>
+            </div>
+            <span class="stat__hint">за последние 24 часа</span>
+          </div>
+        </div>
+
+        <div class="row row--traffic">
+          <div class="card">
+            <div class="card__head">
+              <div>
+                <h3>Посещаемость сайта</h3>
+                <p id="trafficSub">Уникальные посетители</p>
+              </div>
+              <div class="dropdown" id="metricDropdown">
+                <button class="dropdown__btn" id="metricBtn">Уникальные
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M7 10l5 5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+                <div class="dropdown__menu" id="metricMenu" hidden>
+                  <button data-metric="uniq" class="is-active">Уникальные</button>
+                  <button data-metric="views">Просмотры</button>
+                  <button data-metric="clicks">Клики</button>
+                </div>
+              </div>
+            </div>
+            <div class="chart" id="trafficChart"></div>
+          </div>
+
+          <div class="card">
+            <div class="card__head">
+              <div><h3>География посетителей</h3></div>
+            </div>
+            <div class="geo">
+              <div class="geo__map" id="geoMap"></div>
+              <div class="geo__list" id="geoList"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row row--3">
+          <div class="card">
+            <div class="card__head">
+              <div>
+                <h3>Популярные кнопки</h3>
+                <p>Топ кликов по элементам сайта</p>
+              </div>
+              <button class="linkbtn" data-goto="clicks">Все кнопки →</button>
+            </div>
+            <div class="rank" id="topButtons"></div>
+          </div>
+
+          <div class="card">
+            <div class="card__head">
+              <div>
+                <h3>Популярные страницы</h3>
+                <p>Где находятся пользователи</p>
+              </div>
+              <button class="linkbtn" data-goto="pages">Все страницы →</button>
+            </div>
+            <div class="ptable" id="topPages"></div>
+          </div>
+
+          <div class="card activecard">
+            <div class="card__head">
+              <div class="card__headline">
+                <span class="card__badge">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M12 3.5a8.5 8.5 0 1 0 8.5 8.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M12 12l5.5-3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+                </span>
+                <div>
+                  <h3>Активные посетители</h3>
+                  <p>Сейчас на сайте</p>
+                </div>
+              </div>
+            </div>
+            <div class="activecard__big">
+              <span class="activecard__ring"></span>
+              <div>
+                <strong id="onlineBig">—</strong>
+                <span>человека</span>
+              </div>
+            </div>
+            <div class="bars" id="onlineBars"></div>
+            <p class="activecard__max">Максимум за 24 часа: <b id="onlineMax">—</b></p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card__head">
+            <div>
+              <h3>Последние события</h3>
+              <p>Клики, переходы, просмотры и другие действия</p>
+            </div>
+            <button class="linkbtn" data-goto="events">Все события →</button>
+          </div>
+          <div class="table-wrap">
+            <table class="table" id="eventsTable">
+              <thead>
+                <tr><th>Время</th><th>Пользователь</th><th>Действие</th><th>Страница</th><th>Источник</th></tr>
+              </thead>
+              <tbody id="eventsBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ OTHER VIEWS ============ -->
+      <section class="view" data-view="visitors" hidden></section>
+      <section class="view" data-view="clicks" hidden></section>
+      <section class="view" data-view="pages" hidden></section>
+      <section class="view" data-view="pricing" hidden></section>
+      <section class="view" data-view="users" hidden></section>
+      <section class="view" data-view="events" hidden></section>
+      <section class="view" data-view="settings" hidden></section>
+
+      <footer class="foot">
+        <div class="foot__logo">
+          <svg viewBox="0 0 32 32" fill="none" aria-hidden="true">
+            <path d="M9 27V5h8.5a7.5 7.5 0 0 1 0 15H13" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M15.5 19.5L25 28" stroke="currentColor" stroke-width="3.2" stroke-linecap="round"/>
+          </svg>
+          <span>BYNEXVPN</span>
+        </div>
+        <p>© 2026 BYNEXVPN. Админ-панель.</p>
+      </footer>
+    </main>
+  </div>
+
+  <div class="tooltip" id="tooltip" hidden></div>
+
+  <script src="../supabase-config.js"></script>
+  <script src="auth-config.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>
