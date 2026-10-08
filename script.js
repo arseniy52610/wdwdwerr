@@ -65,10 +65,3 @@ function updateActiveNav() {
 
 window.addEventListener("scroll", updateActiveNav, { passive: true });
 updateActiveNav();
-
-document.querySelectorAll("[data-chat-open]").forEach((link) => {
-  link.addEventListener("click", (e) => {
-    e.preventDefault();
-    if (typeof window.eloqra === "function") window.eloqra("open");
-  });
-});
