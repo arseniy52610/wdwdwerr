@@ -1,0 +1,671 @@
+/* ============================================================
+   BYNEXVPN — Страница поддержки (/support)
+   Наследует токены style.css, добавляет только своё.
+   ============================================================ */
+
+html {
+  scroll-snap-type: none;
+  scroll-padding-top: 0;
+  height: 100%;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+.sp-page {
+  height: 100%;
+  overflow: hidden;
+}
+
+.sp {
+  --sp-top-h: 62px;
+  --sp-max: 900px;
+  width: 100%;
+  max-width: var(--sp-max);
+  height: var(--vvh, 100dvh);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background: var(--bg);
+  border-left: 1px solid var(--line);
+  border-right: 1px solid var(--line);
+}
+
+@media (max-width: 940px) {
+  .sp {
+    border-left: 0;
+    border-right: 0;
+    max-width: none;
+  }
+}
+
+/* ---------------- Верхняя панель ---------------- */
+
+.sp__top {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: var(--sp-top-h);
+  padding: 0 14px;
+  padding-top: env(safe-area-inset-top);
+  height: calc(var(--sp-top-h) + env(safe-area-inset-top));
+  background: rgba(5, 5, 6, 0.82);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--line);
+  z-index: 10;
+}
+
+.sp__back {
+  flex: none;
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--text);
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.02);
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.sp__back:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: var(--line-strong);
+}
+
+.sp__back svg {
+  width: 18px;
+  height: 18px;
+}
+
+.sp__id {
+  flex: 1;
+  min-width: 0;
+}
+
+.sp__ttl {
+  font-size: 15.5px;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sp__status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.2;
+}
+
+.sp__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--muted-2);
+  flex: none;
+  transition: background 0.3s ease;
+}
+
+.sp__dot.is-online {
+  background: var(--green);
+  box-shadow: 0 0 8px rgba(53, 208, 127, 0.7);
+}
+
+.sp__dot.is-busy {
+  background: #e8b73c;
+}
+
+.sp__bell {
+  flex: none;
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--muted);
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.sp__bell svg {
+  width: 18px;
+  height: 18px;
+}
+
+.sp__bell.is-on {
+  color: var(--green);
+  border-color: rgba(53, 208, 127, 0.45);
+}
+
+.sp__bell:hover {
+  color: var(--text);
+}
+
+/* ---------------- Лента ---------------- */
+
+.sp__wrap {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+/* Приветственный экран */
+
+.sp__empty {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 18px;
+  padding: 34px 20px 40px;
+  animation: spFade 0.35s ease;
+}
+
+.sp__logo {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.34em;
+  color: var(--muted-2);
+}
+
+.sp__hello {
+  font-size: clamp(16px, 2.4vw, 19px);
+  font-weight: 600;
+  line-height: 1.65;
+  max-width: 520px;
+}
+
+.sp__quick {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  max-width: 560px;
+}
+
+.sp__qbtn {
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text);
+  background: var(--card);
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  padding: 11px 18px;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+.sp__qbtn:hover {
+  transform: translateY(-2px);
+  background: var(--card-2);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.sp__hint {
+  font-size: 12.5px;
+  color: var(--muted-2);
+  max-width: 420px;
+}
+
+/* Тред */
+
+.sp__thread {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 18px 16px 22px;
+  min-height: 100%;
+  justify-content: flex-end;
+}
+
+@media (min-width: 700px) {
+  .sp__thread {
+    padding: 24px 34px 26px;
+  }
+}
+
+/* Разделитель дат */
+
+.sp__day {
+  align-self: center;
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted-2);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 4px 12px;
+  margin: 14px 0 8px;
+}
+
+/* Сообщения */
+
+.sp__m {
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+  animation: spUp 0.26s ease both;
+}
+
+.sp__m--me {
+  align-items: flex-end;
+}
+
+.sp__m--op,
+.sp__m--sys {
+  align-items: flex-start;
+}
+
+.sp__who {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--muted-2);
+  margin: 8px 0 4px 4px;
+}
+
+.sp__b {
+  position: relative;
+  max-width: min(78%, 560px);
+  padding: 10px 14px 8px;
+  border-radius: 18px;
+  font-size: 14.5px;
+  line-height: 1.55;
+  white-space: pre-line;
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
+}
+
+.sp__m--me .sp__b {
+  background: #ffffff;
+  color: #0a0a0c;
+  border-bottom-right-radius: 6px;
+}
+
+.sp__m--op .sp__b {
+  background: var(--card);
+  border: 1px solid var(--line);
+  color: var(--text);
+  border-bottom-left-radius: 6px;
+}
+
+.sp__t {
+  display: block;
+  font-size: 10.5px;
+  color: var(--muted-2);
+  margin-top: 4px;
+  text-align: right;
+}
+
+.sp__m--me .sp__t {
+  color: rgba(10, 10, 12, 0.45);
+}
+
+/* системные */
+
+.sp__m--sys {
+  align-items: center;
+  margin: 8px 0;
+}
+
+.sp__m--sys .sp__b {
+  background: transparent;
+  border: 1px dashed var(--line-strong);
+  color: var(--muted);
+  font-size: 12.5px;
+  text-align: center;
+  border-radius: 14px;
+  max-width: min(86%, 460px);
+  padding: 8px 14px;
+}
+
+.sp__m--sys .sp__t {
+  text-align: center;
+  color: var(--muted-2);
+}
+
+/* исходящие: статус отправки */
+
+.sp__m--pending {
+  opacity: 0.62;
+}
+
+.sp__m--pending .sp__b::after {
+  content: "…";
+}
+
+.sp__m--failed .sp__b {
+  outline: 1px solid rgba(255, 107, 107, 0.7);
+}
+
+/* «Оператор печатает…» */
+
+.sp__typing {
+  align-self: flex-start;
+  display: none;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+  color: var(--muted);
+  padding: 6px 4px;
+  animation: spUp 0.25s ease both;
+}
+
+.sp__typing.is-on {
+  display: flex;
+}
+
+.sp__dots {
+  display: inline-flex;
+  gap: 4px;
+}
+
+.sp__dots i {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--muted);
+  animation: spBlink 1.2s infinite;
+}
+
+.sp__dots i:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.sp__dots i:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+/* Непрочитанные */
+
+.sp__unread {
+  position: absolute;
+  right: 16px;
+  bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #0a0a0c;
+  background: var(--green);
+  border: 0;
+  border-radius: 999px;
+  padding: 9px 15px;
+  cursor: pointer;
+  box-shadow: 0 6px 22px rgba(53, 208, 127, 0.35);
+  animation: spUp 0.25s ease both;
+  z-index: 5;
+}
+
+.sp__unread svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* ---------------- Нижняя часть ---------------- */
+
+.sp__foot {
+  flex: none;
+  padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+  background: rgba(5, 5, 6, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sp__closed {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 9px 12px;
+}
+
+.sp__closed-btn {
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #0a0a0c;
+  background: var(--green);
+  border: 0;
+  border-radius: 999px;
+  padding: 8px 14px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.sp__chip {
+  align-self: flex-start;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text);
+  background: var(--card);
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  padding: 6px 8px 6px 13px;
+  animation: spUp 0.2s ease both;
+}
+
+.sp__chip button {
+  width: 20px;
+  height: 20px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 0;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.sp__composer {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.sp__input {
+  flex: 1;
+  min-width: 0;
+  font-family: inherit;
+  font-size: 16px; /* iOS: 16px не зумит страницу */
+  line-height: 1.45;
+  color: var(--text);
+  background: var(--card);
+  border: 1px solid var(--line-strong);
+  border-radius: 22px;
+  padding: 11px 16px;
+  max-height: 132px;
+  resize: none;
+  outline: none;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.sp__input::placeholder {
+  color: var(--muted-2);
+}
+
+.sp__input:focus {
+  border-color: rgba(255, 255, 255, 0.34);
+  background: var(--card-2);
+}
+
+.sp__send {
+  flex: none;
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 0;
+  background: var(--green);
+  color: #05130c;
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease, background 0.2s ease;
+}
+
+.sp__send svg {
+  width: 19px;
+  height: 19px;
+  margin-left: 2px;
+}
+
+.sp__send:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+.sp__send:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+/* ---------------- Тост ---------------- */
+
+.sp__toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(96px + env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  max-width: min(92vw, 460px);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  background: var(--card-2);
+  border: 1px solid var(--line-strong);
+  border-radius: 14px;
+  padding: 11px 16px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  z-index: 60;
+  animation: spUp 0.25s ease both;
+  text-align: center;
+}
+
+.sp__toast.is-err {
+  border-color: rgba(255, 107, 107, 0.55);
+  color: #ffb3b3;
+}
+
+/* ---------------- Анимации ---------------- */
+
+@keyframes spUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes spBlink {
+  0%, 60%, 100% {
+    opacity: 0.25;
+    transform: translateY(0);
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(-2px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sp__m,
+  .sp__empty,
+  .sp__typing,
+  .sp__unread,
+  .sp__toast,
+  .sp__chip {
+    animation: none;
+  }
+}
+
+/* ---------------- Мобильные нюансы ---------------- */
+
+@media (max-width: 640px) {
+  .sp {
+    --sp-top-h: 54px;
+  }
+
+  .sp__back,
+  .sp__bell {
+    width: 34px;
+    height: 34px;
+  }
+
+  .sp__ttl {
+    font-size: 14.5px;
+  }
+
+  .sp__b {
+    max-width: 84%;
+    font-size: 14.5px;
+  }
+
+  .sp__thread {
+    padding: 14px 12px 18px;
+  }
+
+  .sp__empty {
+    gap: 15px;
+    padding: 26px 16px 34px;
+  }
+
+  .sp__qbtn {
+    padding: 10px 15px;
+    font-size: 13px;
+  }
+
+  .sp__foot {
+    padding: 8px 10px calc(8px + env(safe-area-inset-bottom));
+  }
+
+  .sp__send {
+    width: 44px;
+    height: 44px;
+  }
+}

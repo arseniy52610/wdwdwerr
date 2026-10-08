@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#050506">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Поддержка — BYNEXVPN</title>
+  <link rel="icon" href="../logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="support.css">
+</head>
+<body class="sp-page">
+  <div class="sp" id="spRoot">
+
+    <header class="sp__top">
+      <a class="sp__back" href="/" data-no-track aria-label="На главную">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"></path><path d="M12 19l-7-7 7-7"></path></svg>
+      </a>
+      <div class="sp__id">
+        <div class="sp__ttl">Поддержка BynexVPN</div>
+        <div class="sp__status" id="spStatus"><i class="sp__dot" id="spDot"></i><span id="spStatusText">Проверяем статус…</span></div>
+      </div>
+      <button type="button" class="sp__bell" id="spBell" data-no-track aria-label="Уведомления" hidden>
+        <svg class="sp__bell-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.7 21a2 2 0 0 1-3.4 0"></path></svg>
+        <svg class="sp__bell-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8.7 3.7A6 6 0 0 1 18 8c0 2.3.4 4 1 5.2"></path><path d="M17 17H3s3-2 3-9a6 6 0 0 1 .3-1.8"></path><path d="M13.7 21a2 2 0 0 1-3.4 0"></path><line x1="3" y1="3" x2="21" y2="21"></line></svg>
+      </button>
+    </header>
+
+    <div class="sp__wrap" id="spWrap">
+
+      <div class="sp__empty" id="spEmpty">
+        <div class="sp__logo">R&nbsp;&nbsp;BYNEXVPN</div>
+        <div class="sp__hello">
+          Здравствуйте! 👋<br>
+          Это служба поддержки BynexVPN.<br>
+          Опишите вашу проблему — мы постараемся помочь.
+        </div>
+        <div class="sp__quick" id="spQuick"></div>
+        <div class="sp__hint">Ответим как можно скорее. Обычно это занимает несколько минут.</div>
+      </div>
+
+      <div class="sp__thread" id="spThread" hidden></div>
+
+      <button type="button" class="sp__unread" id="spUnread" hidden data-no-track>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"></path><path d="M19 12l-7 7-7-7"></path></svg>
+        <span id="spUnreadN">1</span>&nbsp;новых
+      </button>
+    </div>
+
+    <div class="sp__foot">
+      <div class="sp__closed" id="spClosedBar" hidden>
+        <span>Обращение закрыто</span>
+        <button type="button" class="sp__closed-btn" id="spNewBtn" data-no-track>Новое обращение</button>
+      </div>
+      <div class="sp__chip" id="spChip" hidden>
+        <span id="spChipText"></span>
+        <button type="button" id="spChipX" data-no-track aria-label="Убрать категорию">×</button>
+      </div>
+      <form class="sp__composer" id="spForm" autocomplete="off">
+        <textarea class="sp__input" id="spText" rows="1" placeholder="Напишите сообщение…" data-no-track></textarea>
+        <button class="sp__send" id="spSend" type="submit" data-no-track aria-label="Отправить" disabled>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"></path><path d="M22 2l-7 20-4-9-9-4 20-7z"></path></svg>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <div class="sp__toast" id="spToast" hidden></div>
+
+  <script src="../supabase-config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="../analytics.js"></script>
+  <script src="support.js"></script>
+</body>
+</html>
