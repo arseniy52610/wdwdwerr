@@ -82,6 +82,24 @@
     alert(prefix + ": " + d.text);
   }
 
+  /* sb.rpc(...) в supabase-js v2 возвращает PostgrestFilterBuilder: это
+     thenable, у которого есть .then(), но нет .catch(). Прямой вызов
+     sb.rpc(...).catch(...) бросает TypeError до отправки запроса.
+     Обёртка даёт настоящий Promise и нормализует три исхода:
+     успех -> резолв, result.error -> реджект, исключение -> реджект. */
+  function rpc(name, params) {
+    var p;
+    try {
+      p = params === undefined ? sb.rpc(name) : sb.rpc(name, params);
+    } catch (e) {
+      return Promise.reject(e);
+    }
+    return Promise.resolve(p).then(function (r) {
+      if (r && r.error) throw r.error;
+      return r;
+    });
+  }
+
   function rootEl() { return document.querySelector('.view[data-view="support"]'); }
 
   function esc(s) {
@@ -216,7 +234,7 @@
 
   function startPing() {
     if (ST.pingTimer) return;
-    var ping = function () { sb.rpc("support_ping").catch(function () {}); };
+    var ping = function () { rpc("support_ping").catch(function () {}); };
     ping();
     ST.pingTimer = setInterval(ping, 30000);
   }
@@ -308,7 +326,7 @@
       var now = Date.now();
       if (ST.open && now - ST.typingAt > 5000) {
         ST.typingAt = now;
-        sb.rpc("support_set_typing", { p_conversation_id: ST.open.id }).catch(function () {});
+        rpc("support_set_typing", { p_conversation_id: ST.open.id }).catch(function () {});
       }
     });
 
@@ -322,7 +340,7 @@
     $("supStatusSel").addEventListener("change", function () {
       if (!ST.open) return;
       var v = $("supStatusSel").value;
-      sb.rpc("support_set_status", { p_conversation_id: ST.open.id, p_status: v }).catch(function (e) {
+      rpc("support_set_status", { p_conversation_id: ST.open.id, p_status: v }).catch(function (e) {
         alertStage("Не удалось изменить статус", e, "set-status");
       });
     });
@@ -330,14 +348,14 @@
     $("supClose").addEventListener("click", function () {
       if (!ST.open) return;
       var next = ST.open.status === "closed" ? "operator_active" : "closed";
-      sb.rpc("support_set_status", { p_conversation_id: ST.open.id, p_status: next }).catch(function (e) {
+      rpc("support_set_status", { p_conversation_id: ST.open.id, p_status: next }).catch(function (e) {
         alertStage("Не удалось изменить статус", e, "set-status");
       });
     });
 
     $("supRead").addEventListener("click", function () {
       if (!ST.open) return;
-      sb.rpc("support_operator_read", { p_conversation_id: ST.open.id }).catch(function () {});
+      rpc("support_operator_read", { p_conversation_id: ST.open.id }).catch(function () {});
     });
   }
 
@@ -516,7 +534,7 @@
     renderHead();
     updateSend();
 
-    sb.rpc("support_operator_read", { p_conversation_id: c.id }).catch(function () {});
+    rpc("support_operator_read", { p_conversation_id: c.id }).catch(function () {});
 
     sb.from("support_messages")
       .select("id,conversation_id,sender,body,read_at,created_at")
@@ -655,7 +673,7 @@
     t.value = "";
     autoGrow();
 
-    sb.rpc("support_operator_reply", {
+    rpc("support_operator_reply", {
       p_conversation_id: ST.open.id,
       p_body: text
     }).then(function (r) {
@@ -689,7 +707,7 @@
           if (ST.open && row.conversation_id === ST.open.id) {
             appendMsg(row);
             if (row.sender !== "operator") {
-              sb.rpc("support_operator_read", { p_conversation_id: ST.open.id }).catch(function () {});
+              rpc("support_operator_read", { p_conversation_id: ST.open.id }).catch(function () {});
             }
             if (atBottom()) scrollMsgs(true);
           }
