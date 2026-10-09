@@ -15,12 +15,13 @@
 
   var el = {
     root: $("spRoot"), wrap: $("spWrap"), empty: $("spEmpty"), thread: $("spThread"),
-    quick: $("spQuick"), statusText: $("spStatusText"), dot: $("spDot"),
+    quick: $("spQuick"), quick2: $("spQuick2"), quickBar: $("spQuickBar"), plus: $("spPlus"),
     form: $("spForm"), text: $("spText"), send: $("spSend"),
     unread: $("spUnread"), unreadN: $("spUnreadN"),
     closedBar: $("spClosedBar"), newBtn: $("spNewBtn"),
     chip: $("spChip"), chipText: $("spChipText"), chipX: $("spChipX"),
-    bell: $("spBell"), toast: $("spToast")
+    menuBtn: $("spMenuBtn"), menu: $("spMenu"), notifyBtn: $("spNotifyBtn"),
+    toast: $("spToast")
   };
 
   var sb = null, session = null, uid = null;
@@ -31,7 +32,7 @@
 
   var typingNode = document.createElement("div");
   typingNode.className = "sp__typing";
-  typingNode.innerHTML = '<span class="sp__dots"><i></i><i></i><i></i></span><span>Оператор печатает…</span>';
+  typingNode.innerHTML = '<div class="sp__av" aria-hidden="true"></div><span class="sp__dots"><i></i><i></i><i></i></span>';
 
   /* ---------------- helpers ---------------- */
 
@@ -97,19 +98,29 @@
 
   /* ---------------- приветствие / быстрые категории ---------------- */
 
+  function closeQuickBar() {
+    el.quickBar.hidden = true;
+    el.plus.classList.remove("is-open");
+  }
+
   function renderQuick() {
+    var boxes = [el.quick, el.quick2];
     CATEGORIES.forEach(function (cat) {
-      var b = document.createElement("button");
-      b.type = "button";
-      b.className = "sp__qbtn";
-      b.textContent = cat;
-      b.addEventListener("click", function () {
-        selectedCategory = cat;
-        el.chipText.textContent = cat;
-        el.chip.hidden = false;
-        el.text.focus();
-      });
-      el.quick.appendChild(b);
+      for (var i = 0; i < boxes.length; i++) {
+        if (!boxes[i]) continue;
+        var b = document.createElement("button");
+        b.type = "button";
+        b.className = "sp__qbtn";
+        b.textContent = cat;
+        b.addEventListener("click", function () {
+          selectedCategory = cat;
+          el.chipText.textContent = cat;
+          el.chip.hidden = false;
+          closeQuickBar();
+          el.text.focus();
+        });
+        boxes[i].appendChild(b);
+      }
     });
   }
 
@@ -126,11 +137,56 @@
   }
 
   function renderShell() {
-    var has = !!conv;
+    var has = !!conv || msgs.length > 0;
     el.empty.hidden = has;
     el.thread.hidden = !has;
-    el.closedBar.hidden = !(has && conv.status === "closed");
+    el.closedBar.hidden = !(conv && conv.status === "closed");
     updateSendState();
+  }
+
+  /* ---------------- авто-сообщения из меню ---------------- */
+
+  var INFO = {
+    pricing:
+      "Тарифы BYNEXVPN:\n\n" +
+      "1 месяц — 250 ₽\n" +
+      "3 месяца — 650 ₽ (≈ 217 ₽/мес)\n" +
+      "6 месяцев — 1250 ₽ (≈ 208 ₽/мес)\n" +
+      "12 месяцев — 2500 ₽ (≈ 208 ₽/мес) · выгодно\n\n" +
+      "В каждом тарифе: 5 устройств, все страны, максимальная скорость и премиальная поддержка.\n\n" +
+      "Подключить: t.me/BynexVPN_rubot",
+    advantages:
+      "Преимущества BYNEXVPN:\n\n" +
+      "01 · Мгновенное подключение — подключайтесь к защищённым серверам за несколько секунд.\n\n" +
+      "02 · Все устройства — Windows / macOS / iOS / Android и другие платформы.\n\n" +
+      "03 · Приватность — ваш трафик защищён в любой сети.\n\n" +
+      "04 · Управление — контроль подписки из одного кабинета."
+  };
+
+  function showInfo(key, silent) {
+    if (!INFO[key]) return;
+    var m = {
+      id: "bx-info-" + key,
+      sender: "system",
+      body: INFO[key],
+      created_at: new Date().toISOString()
+    };
+    if (!rendered[m.id]) appendMsg(m);
+    var node = rendered[m.id];
+    if (node) node.classList.add("sp__m--info");
+    try { sessionStorage.setItem("bx_sp_info_" + key, "1"); } catch (e) {}
+    if (silent) return;
+    renderShell();
+    scrollToBottom(true);
+  }
+
+  function restoreInfos() {
+    var keys = ["pricing", "advantages"];
+    for (var i = 0; i < keys.length; i++) {
+      try {
+        if (sessionStorage.getItem("bx_sp_info_" + keys[i]) === "1") showInfo(keys[i], true);
+      } catch (e) {}
+    }
   }
 
   function makeDaySep(t) {
@@ -146,22 +202,46 @@
     wrap.className = "sp__m sp__m--" + kind;
     wrap.dataset.id = m.id;
 
-    if (kind === "op" && lastSender !== "operator") {
-      var who = document.createElement("div");
-      who.className = "sp__who";
-      who.textContent = "Поддержка";
-      wrap.appendChild(who);
-    }
-
     var body = document.createElement("div");
     body.className = "sp__b";
     body.textContent = esc(m.body);
-    wrap.appendChild(body);
 
     var time = document.createElement("span");
     time.className = "sp__t";
     time.textContent = fmtTime(m.created_at);
-    wrap.appendChild(time);
+
+    if (kind === "op") {
+      var first = lastSender !== "operator";
+      var row = document.createElement("div");
+      row.className = "sp__row" + (first ? "" : " sp__row--cont");
+
+      if (first) {
+        var av = document.createElement("div");
+        av.className = "sp__av";
+        av.setAttribute("aria-hidden", "true");
+        row.appendChild(av);
+      }
+
+      var col = document.createElement("div");
+      col.className = "sp__col";
+      col.appendChild(body);
+      col.appendChild(time);
+      row.appendChild(col);
+      wrap.appendChild(row);
+    } else if (kind === "me") {
+      var meta = document.createElement("span");
+      meta.className = "sp__meta";
+      meta.appendChild(time);
+      var chk = document.createElement("span");
+      chk.className = "sp__check" + (m.read_at ? " is-read" : "");
+      chk.textContent = "✓✓";
+      meta.appendChild(chk);
+      body.appendChild(meta);
+      wrap.appendChild(body);
+    } else {
+      wrap.appendChild(body);
+      wrap.appendChild(time);
+    }
 
     lastSender = m.sender;
     return wrap;
@@ -172,7 +252,7 @@
     var dk = dayKey(m.created_at);
     if (dk !== lastDay) {
       lastDay = dk;
-      el.thread.appendChild(makeDaySep(m.created_at));
+      el.thread.insertBefore(makeDaySep(m.created_at), typingNode);
     }
     var node = nodeFor(m);
     rendered[m.id] = node;
@@ -188,6 +268,7 @@
     lastSender = null;
     el.thread.appendChild(typingNode);
     msgs.forEach(function (m) { appendMsg(m); });
+    restoreInfos();
   }
 
   function appendPending(text) {
@@ -259,10 +340,18 @@
 
   /* ---------------- статус операторов ---------------- */
 
+  function paintStatus(text, online) {
+    var dots = document.querySelectorAll(".js-dot");
+    for (var i = 0; i < dots.length; i++) {
+      dots[i].classList.toggle("is-online", !!online);
+      dots[i].classList.toggle("is-busy", !online);
+    }
+    var texts = document.querySelectorAll(".js-stat");
+    for (var j = 0; j < texts.length; j++) texts[j].textContent = text;
+  }
+
   function setOnline(online) {
-    el.dot.classList.toggle("is-online", !!online);
-    el.dot.classList.toggle("is-busy", !online);
-    el.statusText.textContent = online ? "Операторы онлайн" : "Операторы сейчас заняты";
+    paintStatus(online ? "Онлайн" : "Не в сети", !!online);
   }
 
   function fetchStatus() {
@@ -362,16 +451,20 @@
     } catch (e) {}
   }
 
-  function initBell() {
+  function initNotify() {
     if (!("Notification" in window)) return;
-    el.bell.hidden = false;
-    el.bell.classList.toggle("is-on", ls("bx_sp_notify") === "1" && Notification.permission === "granted");
-    el.bell.addEventListener("click", function () {
+    el.notifyBtn.hidden = false;
+    var sync = function () {
+      el.notifyBtn.classList.toggle("is-on", ls("bx_sp_notify") === "1" && Notification.permission === "granted");
+    };
+    sync();
+    el.notifyBtn.addEventListener("click", function () {
       var p = Notification.permission;
       var done = function (perm) {
         var ok = perm === "granted";
         lsSet("bx_sp_notify", ok ? "1" : "0");
-        el.bell.classList.toggle("is-on", ok);
+        sync();
+        closeMenu();
         toast(ok ? "Уведомления включены" : "Уведомления не разрешены", !ok);
       };
       if (p === "granted") { done("granted"); return; }
@@ -379,6 +472,11 @@
       var res = Notification.requestPermission(done);
       if (res && typeof res.then === "function") res.then(done).catch(function () {});
     });
+  }
+
+  function closeMenu() {
+    el.menu.hidden = true;
+    el.menuBtn.setAttribute("aria-expanded", "false");
   }
 
   /* ---------------- отправка ---------------- */
@@ -548,6 +646,37 @@
 
     el.chipX.addEventListener("click", clearChip);
 
+    var infoLinks = document.querySelectorAll("[data-info]");
+    for (var i = 0; i < infoLinks.length; i++) {
+      infoLinks[i].addEventListener("click", function (e) {
+        e.preventDefault();
+        closeMenu();
+        showInfo(this.getAttribute("data-info"));
+      });
+    }
+
+    el.menuBtn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      var open = el.menu.hidden;
+      el.menu.hidden = !open;
+      el.menuBtn.setAttribute("aria-expanded", open ? "true" : "false");
+    });
+
+    document.addEventListener("click", function (e) {
+      if (el.menu.hidden) return;
+      if (!el.menu.contains(e.target) && !el.menuBtn.contains(e.target)) closeMenu();
+    });
+
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") closeMenu();
+    });
+
+    el.plus.addEventListener("click", function () {
+      var show = el.quickBar.hidden;
+      el.quickBar.hidden = !show;
+      el.plus.classList.toggle("is-open", show);
+    });
+
     el.unread.addEventListener("click", function () {
       hideUnread();
       scrollToBottom(true);
@@ -597,15 +726,13 @@
   function fail(msg, err) {
     ready = false;
     updateSendState();
-    el.statusText.textContent = msg;
-    el.dot.classList.remove("is-online");
-    el.dot.classList.add("is-busy");
+    paintStatus(msg, false);
     if (err) console.error("[support]", err);
   }
 
   function boot() {
     renderQuick();
-    initBell();
+    initNotify();
     wire();
 
     if (!CFG.url || !CFG.key) {

@@ -1,5 +1,6 @@
 /* ============================================================
    BYNEXVPN — Страница поддержки (/support)
+   Liquid Glass по референсу: чёрное стекло, белые акценты.
    Наследует токены style.css, добавляет только своё.
    ============================================================ */
 
@@ -13,31 +14,84 @@ html {
   display: none !important;
 }
 
+/* ---------------- Фон: чёрное + световые дуги ---------------- */
+
 .sp-page {
   height: 100%;
   overflow: hidden;
+  position: relative;
+  background:
+    radial-gradient(1400px 900px at 85% -15%, rgba(255, 255, 255, 0.07), transparent 55%),
+    radial-gradient(1100px 800px at -12% 65%, rgba(255, 255, 255, 0.045), transparent 55%),
+    radial-gradient(900px 600px at 75% 115%, rgba(255, 255, 255, 0.04), transparent 60%),
+    #000000;
 }
 
+.sp-page::before,
+.sp-page::after {
+  content: "";
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.sp-page::before {
+  width: 1600px;
+  height: 1600px;
+  right: -640px;
+  top: -980px;
+  border: 1.5px solid rgba(255, 255, 255, 0.22);
+  background: radial-gradient(circle at 40% 75%, rgba(255, 255, 255, 0.06), transparent 55%);
+  box-shadow: 0 0 90px rgba(255, 255, 255, 0.05);
+  -webkit-mask-image: linear-gradient(150deg, transparent 42%, #000 58%, transparent 82%);
+  mask-image: linear-gradient(150deg, transparent 42%, #000 58%, transparent 82%);
+}
+
+.sp-page::after {
+  width: 1300px;
+  height: 1300px;
+  left: -760px;
+  bottom: -720px;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  background: radial-gradient(circle at 70% 30%, rgba(255, 255, 255, 0.04), transparent 55%);
+  -webkit-mask-image: linear-gradient(20deg, transparent 45%, #000 62%, transparent 85%);
+  mask-image: linear-gradient(20deg, transparent 45%, #000 62%, transparent 85%);
+}
+
+/* ---------------- Окно чата (стекло) ---------------- */
+
 .sp {
-  --sp-top-h: 62px;
-  --sp-max: 900px;
-  width: 100%;
-  max-width: var(--sp-max);
-  height: var(--vvh, 100dvh);
-  margin: 0 auto;
+  --sp-top-h: 72px;
+  width: calc(100% - 48px);
+  max-width: 1060px;
+  height: calc(var(--vvh, 100dvh) - 110px);
+  max-height: 900px;
+  margin: 55px auto;
   display: flex;
   flex-direction: column;
   position: relative;
-  background: var(--bg);
-  border-left: 1px solid var(--line);
-  border-right: 1px solid var(--line);
+  z-index: 1;
+  border-radius: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(9, 9, 11, 0.66);
+  backdrop-filter: blur(36px) saturate(1.15);
+  -webkit-backdrop-filter: blur(36px) saturate(1.15);
+  box-shadow: 0 50px 140px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.09);
+  overflow: hidden;
 }
 
-@media (max-width: 940px) {
+@media (max-width: 700px) {
   .sp {
-    border-left: 0;
-    border-right: 0;
+    --sp-top-h: 60px;
+    width: 100%;
     max-width: none;
+    height: var(--vvh, 100dvh);
+    max-height: none;
+    margin: 0;
+    border-radius: 0;
+    border: 0;
+    box-shadow: none;
+    background: rgba(6, 6, 7, 0.8);
   }
 }
 
@@ -48,38 +102,67 @@ html {
   display: flex;
   align-items: center;
   gap: 12px;
-  height: var(--sp-top-h);
-  padding: 0 14px;
-  padding-top: env(safe-area-inset-top);
   height: calc(var(--sp-top-h) + env(safe-area-inset-top));
-  background: rgba(5, 5, 6, 0.82);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border-bottom: 1px solid var(--line);
+  padding: 0 16px;
+  padding-top: env(safe-area-inset-top);
+  background: rgba(255, 255, 255, 0.035);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  position: relative;
   z-index: 10;
 }
 
 .sp__back {
   flex: none;
-  width: 38px;
-  height: 38px;
+  width: 40px;
+  height: 40px;
   display: grid;
   place-items: center;
   border-radius: 50%;
   color: var(--text);
-  border: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   transition: background 0.2s ease, border-color 0.2s ease;
 }
 
 .sp__back:hover {
-  background: rgba(255, 255, 255, 0.07);
-  border-color: var(--line-strong);
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.28);
 }
 
 .sp__back svg {
   width: 18px;
   height: 18px;
+}
+
+.sp__ava {
+  flex: none;
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: linear-gradient(160deg, #1b1b1f, #0a0a0c);
+  display: grid;
+  place-items: center;
+}
+
+.sp__ava img {
+  width: 62%;
+  height: 62%;
+  object-fit: contain;
+}
+
+.sp__ava .sp__dot {
+  position: absolute;
+  right: -1px;
+  bottom: 1px;
+  width: 11px;
+  height: 11px;
+  border: 2px solid #0b0b0d;
 }
 
 .sp__id {
@@ -88,28 +171,44 @@ html {
 }
 
 .sp__ttl {
-  font-size: 15.5px;
-  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 16.5px;
+  font-weight: 700;
   letter-spacing: 0.01em;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
+.sp__badge {
+  flex: none;
+  width: 15px;
+  height: 15px;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+@media (min-width: 701px) {
+  .sp__badge {
+    display: none;
+  }
+}
+
 .sp__status {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 12px;
-  color: var(--muted);
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, 0.55);
   line-height: 1.2;
 }
 
 .sp__dot {
-  width: 7px;
-  height: 7px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  background: var(--muted-2);
+  background: rgba(255, 255, 255, 0.28);
   flex: none;
   transition: background 0.3s ease;
 }
@@ -123,32 +222,83 @@ html {
   background: #e8b73c;
 }
 
-.sp__bell {
+.sp__menu-btn {
   flex: none;
-  width: 38px;
-  height: 38px;
+  width: 40px;
+  height: 40px;
   display: grid;
   place-items: center;
   border-radius: 50%;
-  background: transparent;
-  border: 1px solid var(--line);
-  color: var(--muted);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.85);
   cursor: pointer;
-  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: background 0.2s ease, border-color 0.2s ease;
 }
 
-.sp__bell svg {
-  width: 18px;
-  height: 18px;
+.sp__menu-btn:hover {
+  background: rgba(255, 255, 255, 0.11);
+  border-color: rgba(255, 255, 255, 0.26);
 }
 
-.sp__bell.is-on {
-  color: var(--green);
-  border-color: rgba(53, 208, 127, 0.45);
+.sp__menu-btn svg {
+  width: 20px;
+  height: 20px;
 }
 
-.sp__bell:hover {
+.sp__menu {
+  position: absolute;
+  right: 14px;
+  top: calc(100% + 8px);
+  min-width: 224px;
+  background: rgba(18, 18, 20, 0.82);
+  backdrop-filter: blur(28px) saturate(1.2);
+  -webkit-backdrop-filter: blur(28px) saturate(1.2);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 18px;
+  padding: 6px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  z-index: 30;
+  animation: spUp 0.18s ease both;
+}
+
+.sp__menu button,
+.sp__menu a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  padding: 11px 12px;
+  border: 0;
+  background: transparent;
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
   color: var(--text);
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.16s ease;
+}
+
+.sp__menu button:hover,
+.sp__menu a:hover {
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.sp__menu .is-on {
+  color: var(--green);
+}
+
+.sp__menu .is-on::after {
+  content: "вкл";
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--green);
 }
 
 /* ---------------- Лента ---------------- */
@@ -161,6 +311,21 @@ html {
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.16) transparent;
+}
+
+.sp__wrap::-webkit-scrollbar {
+  width: 8px;
+}
+
+.sp__wrap::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+}
+
+.sp__wrap::-webkit-scrollbar-track {
+  background: transparent;
 }
 
 /* Приветственный экран */
@@ -181,7 +346,7 @@ html {
   font-size: 13px;
   font-weight: 800;
   letter-spacing: 0.34em;
-  color: var(--muted-2);
+  color: rgba(255, 255, 255, 0.42);
 }
 
 .sp__hello {
@@ -199,28 +364,38 @@ html {
   max-width: 560px;
 }
 
+.sp__quick--bar {
+  justify-content: flex-start;
+  max-width: none;
+  gap: 8px;
+  padding: 4px 0 6px;
+  animation: spUp 0.2s ease both;
+}
+
 .sp__qbtn {
   font-family: inherit;
   font-size: 13.5px;
   font-weight: 600;
   color: var(--text);
-  background: var(--card);
-  border: 1px solid var(--line-strong);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 999px;
   padding: 11px 18px;
   cursor: pointer;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
 }
 
 .sp__qbtn:hover {
   transform: translateY(-2px);
-  background: var(--card-2);
-  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.28);
 }
 
 .sp__hint {
   font-size: 12.5px;
-  color: var(--muted-2);
+  color: rgba(255, 255, 255, 0.42);
   max-width: 420px;
 }
 
@@ -232,29 +407,34 @@ html {
   gap: 4px;
   padding: 18px 16px 22px;
   min-height: 100%;
-  justify-content: flex-end;
 }
 
 @media (min-width: 700px) {
   .sp__thread {
-    padding: 24px 34px 26px;
+    padding: 26px 40px 28px;
   }
 }
 
 /* Разделитель дат */
 
 .sp__day {
+  position: sticky;
+  top: 6px;
+  z-index: 2;
   align-self: center;
   font-size: 11.5px;
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--muted-2);
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid var(--line);
+  color: rgba(255, 255, 255, 0.55);
+  background: rgba(22, 22, 25, 0.82);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.11);
   border-radius: 999px;
   padding: 4px 12px;
-  margin: 14px 0 8px;
+  margin: 12px 0 8px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07);
 }
 
 /* Сообщения */
@@ -275,53 +455,98 @@ html {
   align-items: flex-start;
 }
 
-.sp__who {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: var(--muted-2);
-  margin: 8px 0 4px 4px;
+.sp__row {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 100%;
+}
+
+.sp__row--cont {
+  padding-left: 54px;
+}
+
+.sp__col {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.sp__av {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: url(../logo.png) center / 56% no-repeat, linear-gradient(160deg, #1c1c20, #0a0a0c);
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .sp__b {
   position: relative;
   max-width: min(78%, 560px);
-  padding: 10px 14px 8px;
-  border-radius: 18px;
+  padding: 11px 15px 10px;
+  border-radius: 20px;
   font-size: 14.5px;
   line-height: 1.55;
   white-space: pre-line;
   word-wrap: break-word;
   overflow-wrap: anywhere;
+  color: #eef0f3;
+  background: linear-gradient(157deg, rgba(38, 38, 43, 0.72), rgba(15, 15, 17, 0.55));
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(24px) saturate(1.2);
+  -webkit-backdrop-filter: blur(24px) saturate(1.2);
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.09);
 }
 
 .sp__m--me .sp__b {
-  background: #ffffff;
-  color: #0a0a0c;
-  border-bottom-right-radius: 6px;
-}
-
-.sp__m--op .sp__b {
-  background: var(--card);
-  border: 1px solid var(--line);
-  color: var(--text);
-  border-bottom-left-radius: 6px;
+  background: linear-gradient(157deg, rgba(66, 66, 72, 0.78), rgba(24, 24, 27, 0.6));
+  border-color: rgba(255, 255, 255, 0.16);
+  color: #f4f5f7;
 }
 
 .sp__t {
   display: block;
   font-size: 10.5px;
-  color: var(--muted-2);
+  color: rgba(255, 255, 255, 0.42);
+  margin-top: 5px;
+  text-align: left;
+}
+
+.sp__m--sys .sp__t {
+  text-align: center;
+}
+
+.sp__meta {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
   margin-top: 4px;
+}
+
+.sp__meta .sp__t {
+  margin-top: 0;
   text-align: right;
+  color: rgba(255, 255, 255, 0.5);
 }
 
-.sp__m--me .sp__t {
-  color: rgba(10, 10, 12, 0.45);
+.sp__check {
+  font-size: 11px;
+  line-height: 1;
+  letter-spacing: -0.06em;
+  color: rgba(255, 255, 255, 0.35);
 }
 
-/* системные */
+.sp__check.is-read {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+/* системные / авто-сообщения */
 
 .sp__m--sys {
   align-items: center;
@@ -329,19 +554,30 @@ html {
 }
 
 .sp__m--sys .sp__b {
-  background: transparent;
-  border: 1px dashed var(--line-strong);
-  color: var(--muted);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  color: rgba(255, 255, 255, 0.75);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
   font-size: 12.5px;
   text-align: center;
-  border-radius: 14px;
+  border-radius: 16px;
   max-width: min(86%, 460px);
-  padding: 8px 14px;
+  padding: 9px 14px;
 }
 
-.sp__m--sys .sp__t {
-  text-align: center;
-  color: var(--muted-2);
+.sp__m--info .sp__b {
+  text-align: left;
+  max-width: min(92%, 540px);
+  font-size: 13.5px;
+  line-height: 1.62;
+  padding: 13px 16px;
+  color: #eef0f3;
+}
+
+.sp__m--info .sp__t {
+  text-align: right;
 }
 
 /* исходящие: статус отправки */
@@ -354,20 +590,22 @@ html {
   content: "…";
 }
 
+.sp__m--pending .sp__meta {
+  display: none;
+}
+
 .sp__m--failed .sp__b {
   outline: 1px solid rgba(255, 107, 107, 0.7);
 }
 
-/* «Оператор печатает…» */
+/* индикатор «печатает…» */
 
 .sp__typing {
   align-self: flex-start;
   display: none;
   align-items: center;
-  gap: 8px;
-  font-size: 12.5px;
-  color: var(--muted);
-  padding: 6px 4px;
+  gap: 10px;
+  padding: 2px 0 4px;
   animation: spUp 0.25s ease both;
 }
 
@@ -377,14 +615,21 @@ html {
 
 .sp__dots {
   display: inline-flex;
-  gap: 4px;
+  gap: 5px;
+  padding: 14px 17px;
+  border-radius: 999px;
+  background: linear-gradient(157deg, rgba(38, 38, 43, 0.72), rgba(15, 15, 17, 0.55));
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.09);
 }
 
 .sp__dots i {
-  width: 5px;
-  height: 5px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
-  background: var(--muted);
+  background: rgba(255, 255, 255, 0.7);
   animation: spBlink 1.2s infinite;
 }
 
@@ -428,11 +673,11 @@ html {
 
 .sp__foot {
   flex: none;
-  padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
-  background: rgba(5, 5, 6, 0.88);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border-top: 1px solid var(--line);
+  padding: 10px 14px calc(12px + env(safe-area-inset-bottom));
+  background: rgba(255, 255, 255, 0.035);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -444,9 +689,9 @@ html {
   justify-content: space-between;
   gap: 10px;
   font-size: 13px;
-  color: var(--muted);
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--line);
+  color: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 14px;
   padding: 9px 12px;
 }
@@ -456,7 +701,7 @@ html {
   font-size: 12.5px;
   font-weight: 700;
   color: #0a0a0c;
-  background: var(--green);
+  background: #f3f5f9;
   border: 0;
   border-radius: 999px;
   padding: 8px 14px;
@@ -472,10 +717,12 @@ html {
   font-size: 12.5px;
   font-weight: 600;
   color: var(--text);
-  background: var(--card);
-  border: 1px solid var(--line-strong);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.13);
   border-radius: 999px;
   padding: 6px 8px 6px 13px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   animation: spUp 0.2s ease both;
 }
 
@@ -486,14 +733,53 @@ html {
   place-items: center;
   border-radius: 50%;
   border: 0;
-  background: rgba(255, 255, 255, 0.08);
-  color: var(--muted);
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.7);
   font-size: 14px;
   line-height: 1;
   cursor: pointer;
 }
 
+.sp__composer-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.sp__plus {
+  flex: none;
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  color: var(--text);
+  cursor: pointer;
+  transition: transform 0.22s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+.sp__plus:hover {
+  background: rgba(255, 255, 255, 0.11);
+  border-color: rgba(255, 255, 255, 0.28);
+}
+
+.sp__plus.is-open {
+  transform: rotate(45deg);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.sp__plus svg {
+  width: 20px;
+  height: 20px;
+}
+
 .sp__composer {
+  flex: 1;
+  min-width: 0;
   display: flex;
   align-items: flex-end;
   gap: 8px;
@@ -506,23 +792,30 @@ html {
   font-size: 16px; /* iOS: 16px не зумит страницу */
   line-height: 1.45;
   color: var(--text);
-  background: var(--card);
-  border: 1px solid var(--line-strong);
-  border-radius: 22px;
-  padding: 11px 16px;
+  background: rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 999px;
+  padding: 12px 18px;
   max-height: 132px;
   resize: none;
   outline: none;
+  scrollbar-width: none;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
   transition: border-color 0.2s ease, background 0.2s ease;
 }
 
+.sp__input::-webkit-scrollbar {
+  display: none;
+}
+
 .sp__input::placeholder {
-  color: var(--muted-2);
+  color: rgba(255, 255, 255, 0.4);
 }
 
 .sp__input:focus {
-  border-color: rgba(255, 255, 255, 0.34);
-  background: var(--card-2);
+  border-color: rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.085);
 }
 
 .sp__send {
@@ -533,9 +826,10 @@ html {
   place-items: center;
   border-radius: 50%;
   border: 0;
-  background: var(--green);
-  color: #05130c;
+  background: #f3f5f9;
+  color: #0a0a0c;
   cursor: pointer;
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.35);
   transition: transform 0.2s ease, opacity 0.2s ease, background 0.2s ease;
 }
 
@@ -547,6 +841,7 @@ html {
 
 .sp__send:hover:not(:disabled) {
   transform: translateY(-2px);
+  background: #ffffff;
 }
 
 .sp__send:disabled {
@@ -565,11 +860,13 @@ html {
   font-size: 13px;
   font-weight: 600;
   color: var(--text);
-  background: var(--card-2);
-  border: 1px solid var(--line-strong);
+  background: rgba(18, 18, 20, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 14px;
   padding: 11px 16px;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08);
   z-index: 60;
   animation: spUp 0.25s ease both;
   text-align: center;
@@ -619,7 +916,9 @@ html {
   .sp__typing,
   .sp__unread,
   .sp__toast,
-  .sp__chip {
+  .sp__chip,
+  .sp__menu,
+  .sp__quick--bar {
     animation: none;
   }
 }
@@ -627,22 +926,23 @@ html {
 /* ---------------- Мобильные нюансы ---------------- */
 
 @media (max-width: 640px) {
-  .sp {
-    --sp-top-h: 54px;
+  .sp__back,
+  .sp__menu-btn {
+    width: 36px;
+    height: 36px;
   }
 
-  .sp__back,
-  .sp__bell {
-    width: 34px;
-    height: 34px;
+  .sp__ava {
+    width: 38px;
+    height: 38px;
   }
 
   .sp__ttl {
-    font-size: 14.5px;
+    font-size: 15px;
   }
 
   .sp__b {
-    max-width: 84%;
+    max-width: 86%;
     font-size: 14.5px;
   }
 
@@ -664,8 +964,23 @@ html {
     padding: 8px 10px calc(8px + env(safe-area-inset-bottom));
   }
 
+  .sp__plus,
   .sp__send {
     width: 44px;
     height: 44px;
+  }
+
+  .sp__av,
+  .sp__row--cont {
+    width: auto;
+  }
+
+  .sp__av {
+    width: 40px;
+    height: 40px;
+  }
+
+  .sp__row--cont {
+    padding-left: 50px;
   }
 }
