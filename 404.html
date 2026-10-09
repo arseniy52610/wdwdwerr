@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#010203">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" type="image/png" href="logo.png">
+  <title>404 — Страница не найдена | BYNEXVPN</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@50..150,100..900&family=Inter:wght@400;500;600;700;800;900&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    html { scroll-padding-top: 100px; }
+    body.e404-page { background: #010203; }
+
+    /* ---------- Header ---------- */
+    .e404-page .header__inner {
+      height: 100px;
+      gap: 96px;
+      justify-content: flex-start;
+      max-width: 1158px;
+      padding-left: 34px;
+      padding-right: 20px;
+    }
+    .e404-page .header .logo__img {
+      width: 56px;
+      height: 61px;
+      object-fit: fill;
+      position: relative;
+      top: -1px;
+    }
+    .e404-page .header .logo__text {
+      font-size: 18px;
+      letter-spacing: 5.6px;
+      line-height: 1;
+      position: relative;
+      top: 3.5px;
+    }
+    .e404-page .nav { gap: 41px; }
+    .e404-page .nav__link {
+      font-size: 12.4px;
+      line-height: 1.5;
+      letter-spacing: 0.2px;
+      color: #fff;
+      padding: 1.3px 0 4px;
+      border-bottom: 2px solid transparent;
+    }
+    .e404-page .nav__link.is-active { border-bottom-color: #fff; }
+    .e404-page .header__actions {
+      gap: 10px;
+      margin-left: auto;
+      position: relative;
+      top: -3px;
+    }
+    .e404-page .header__actions .btn {
+      padding: 0;
+      font-size: 12.5px;
+      letter-spacing: 0;
+      border-radius: 999px;
+    }
+    .e404-page .header__actions .btn--ghost { width: 80px; height: 34px; }
+    .e404-page .header__actions .btn--white { width: 117px; height: 32px; }
+    .e404-page .mobile-menu { inset: 100px 0 auto 0; }
+
+    /* ---------- Hero ---------- */
+    .e404-page .hero {
+      padding: 0;
+      background: #010203;
+      border-bottom-color: rgba(255, 255, 255, 0.057);
+    }
+    .e404-page .hero::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 120px;
+      height: 100px;
+      background:
+        radial-gradient(10px 12px at 5px 38px, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0) 74%),
+        radial-gradient(50px 34px at 0px 31px, rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0) 76%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .e404-page .hero__inner {
+      display: block;
+      min-height: 0;
+      max-width: 1148px;
+      padding: 239.5px 24px 0;
+    }
+
+    /* Globe */
+    .e404-page .globe {
+      display: block;
+      width: min(54vw, 706px);
+      left: calc(50% + 24px);
+      right: auto;
+      top: -48px;
+      transform: translateX(-50%);
+      animation: fade-in 1.2s ease both;
+    }
+    .e404-page .globe__ring--1,
+    .e404-page .globe__ring--2,
+    .e404-page .globe__ring--3,
+    .e404-page .globe__shine,
+    .e404-page .globe__dots,
+    .e404-page .globe__sphere,
+    .e404-page .globe::before { animation: none; }
+    .e404-page .globe__ring--4 {
+      inset: -23%;
+      transform: rotateX(66deg) rotateZ(-14deg);
+      border-color: rgba(255, 255, 255, 0.3);
+      animation: none;
+    }
+    .e404-page .globe__sphere {
+      background:
+        radial-gradient(circle at 66% 26%, rgba(255, 255, 255, 0.16), transparent 55%),
+        radial-gradient(circle at 72% 70%, rgba(255, 255, 255, 0.05), transparent 50%),
+        radial-gradient(circle at 50% 50%, #0c0c10 0%, #07070a 62%, #040405 100%);
+    }
+    .e404-page .globe__dots {
+      -webkit-mask-image: radial-gradient(circle at 66% 26%, #000 24%, transparent 60%);
+      mask-image: radial-gradient(circle at 66% 26%, #000 24%, transparent 68%);
+      opacity: 0.25;
+    }
+    .e404-page .globe__shine {
+      inset: 15%;
+      transform: rotate(32deg) scaleY(0.88);
+      opacity: 1;
+      filter: blur(2px) drop-shadow(0 0 10px rgba(255, 255, 255, 0.85));
+    }
+    .e404-page .globe__ring { border-color: rgba(255, 255, 255, 0.45); }
+    .e404-page .globe__ring--3::after {
+      border-top-color: rgba(255, 255, 255, 0.95);
+      filter: blur(2px) drop-shadow(0 0 12px rgba(255, 255, 255, 0.9));
+    }
+    .e404-page .globe__sphere::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: linear-gradient(180deg, rgba(1, 2, 3, 0) 40%, rgba(1, 2, 3, 0.6) 56%, rgba(1, 2, 3, 0.95) 74%, rgba(1, 2, 3, 0.97) 100%);
+    }
+
+    .e404-arca {
+      position: absolute;
+      left: -84px;
+      top: 44px;
+      width: 132px;
+      height: 1.6px;
+      z-index: 2;
+      pointer-events: none;
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.12) 55%, rgba(255, 255, 255, 0.07));
+      transform-origin: left center;
+      transform: rotate(-20.5deg);
+      filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.3));
+    }
+
+    /* Animations (BYNEXVPN subtle motion) */
+    @keyframes e404-spin1 { from { transform: rotateX(72deg) rotateZ(-18deg); } to { transform: rotateX(72deg) rotateZ(342deg); } }
+    @keyframes e404-spin2 { from { transform: rotateX(64deg) rotateZ(38deg); } to { transform: rotateX(64deg) rotateZ(398deg); } }
+    @keyframes e404-spin3 { from { transform: rotateX(78deg) rotateZ(96deg); } to { transform: rotateX(78deg) rotateZ(456deg); } }
+    @keyframes e404-spin4 { from { transform: rotateX(66deg) rotateZ(-14deg); } to { transform: rotateX(66deg) rotateZ(346deg); } }
+    .e404-page .globe__ring--1 { animation: e404-spin1 20s linear infinite; }
+    .e404-page .globe__ring--2 { animation: e404-spin2 26s linear infinite reverse; }
+    .e404-page .globe__ring--3 { animation: e404-spin3 31s linear infinite; }
+    .e404-page .globe__ring--4 { animation: e404-spin4 18s linear infinite reverse; }
+
+    @keyframes e404-sweep {
+      0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+        opacity: 0;
+        border-top-color: rgba(150, 195, 255, 0);
+        filter: blur(1px) drop-shadow(0 0 12px rgba(120, 175, 255, 0));
+      }
+      3% {
+        opacity: 1;
+        border-top-color: rgba(160, 205, 255, 1);
+        filter: blur(1px) drop-shadow(0 0 16px rgba(120, 175, 255, 1));
+      }
+      25% {
+        transform: translate(-50%, -50%) rotate(330deg);
+        opacity: 1;
+        border-top-color: rgba(160, 205, 255, 1);
+        filter: blur(1px) drop-shadow(0 0 16px rgba(120, 175, 255, 1));
+      }
+      32% {
+        transform: translate(-50%, -50%) rotate(368deg);
+        opacity: 0;
+        border-top-color: rgba(150, 195, 255, 0);
+        filter: blur(1px) drop-shadow(0 0 12px rgba(120, 175, 255, 0));
+      }
+      100% {
+        transform: translate(-50%, -50%) rotate(368deg);
+        opacity: 0;
+        border-top-color: rgba(150, 195, 255, 0);
+        filter: blur(1px) drop-shadow(0 0 12px rgba(120, 175, 255, 0));
+      }
+    }
+    .e404-page .globe__ring--4::after { animation: e404-sweep 8s linear infinite; }
+
+    @keyframes e404-shinewob {
+      0%, 100% { transform: rotate(14deg) scaleY(0.88); }
+      50% { transform: rotate(54deg) scaleY(0.9); }
+    }
+    .e404-page .globe__shine { animation: e404-shinewob 7s ease-in-out infinite; }
+
+    @keyframes e404-starpulse {
+      0%, 100% { filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.14)); transform: scale(1); }
+      50% { filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.45)); transform: scale(1.06); }
+    }
+    .e404-star { animation: e404-starpulse 4s ease-in-out infinite; transform-origin: center; }
+
+    .e404-particles {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .e404-particles i {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.5;
+      background: radial-gradient(circle, rgba(195, 222, 255, 1), rgba(130, 180, 255, 0) 72%);
+      box-shadow: 0 0 7px rgba(130, 180, 255, 0.55);
+      animation: e404-floatA 18s ease-in-out infinite alternate, e404-blink 9s ease-in-out infinite;
+    }
+    .e404-particles i:nth-child(1)  { left: 2.5%; top: 14%; width: 3px; height: 3px; animation: e404-floatA 16s ease-in-out infinite alternate, e404-blink 8s ease-in-out infinite; animation-delay: -3s, -4s; }
+    .e404-particles i:nth-child(2)  { left: 6%;   top: 30%; width: 4px; height: 4px; animation: e404-floatB 21s ease-in-out infinite alternate, e404-blink 12s ease-in-out infinite; animation-delay: -8s, -2s; }
+    .e404-particles i:nth-child(3)  { left: 9.5%; top: 47%; width: 2px; height: 2px; animation: e404-floatC 15s ease-in-out infinite alternate, e404-blink 10s ease-in-out infinite; animation-delay: -12s, -6s; }
+    .e404-particles i:nth-child(4)  { left: 3.5%; top: 62%; width: 4px; height: 4px; animation: e404-floatA 23s ease-in-out infinite alternate, e404-blink 13s ease-in-out infinite; animation-delay: -5s, -9s; }
+    .e404-particles i:nth-child(5)  { left: 11%;  top: 76%; width: 3px; height: 3px; animation: e404-floatB 17s ease-in-out infinite alternate, e404-blink 9s ease-in-out infinite; animation-delay: -10s, -3s; }
+    .e404-particles i:nth-child(6)  { left: 5%;   top: 89%; width: 2px; height: 2px; animation: e404-floatC 24s ease-in-out infinite alternate, e404-blink 14s ease-in-out infinite; animation-delay: -16s, -7s; }
+    .e404-particles i:nth-child(7)  { left: 8%;   top: 8%;  width: 3px; height: 3px; animation: e404-floatB 19s ease-in-out infinite alternate, e404-blink 11s ease-in-out infinite; animation-delay: -2s, -11s; }
+    .e404-particles i:nth-child(8)  { left: 96%;  top: 12%; width: 3px; height: 3px; animation: e404-floatC 18s ease-in-out infinite alternate, e404-blink 8s ease-in-out infinite; animation-delay: -6s, -5s; }
+    .e404-particles i:nth-child(9)  { left: 92%;  top: 28%; width: 4px; height: 4px; animation: e404-floatA 22s ease-in-out infinite alternate, e404-blink 13s ease-in-out infinite; animation-delay: -14s, -1s; }
+    .e404-particles i:nth-child(10) { left: 89%;  top: 45%; width: 2px; height: 2px; animation: e404-floatB 15s ease-in-out infinite alternate, e404-blink 10s ease-in-out infinite; animation-delay: -4s, -8s; }
+    .e404-particles i:nth-child(11) { left: 95%;  top: 58%; width: 3px; height: 3px; animation: e404-floatC 20s ease-in-out infinite alternate, e404-blink 12s ease-in-out infinite; animation-delay: -9s, -3s; }
+    .e404-particles i:nth-child(12) { left: 90%;  top: 72%; width: 4px; height: 4px; animation: e404-floatA 16s ease-in-out infinite alternate, e404-blink 9s ease-in-out infinite; animation-delay: -13s, -6s; }
+    .e404-particles i:nth-child(13) { left: 97%;  top: 84%; width: 2px; height: 2px; animation: e404-floatB 24s ease-in-out infinite alternate, e404-blink 14s ease-in-out infinite; animation-delay: -7s, -10s; }
+    .e404-particles i:nth-child(14) { left: 93%;  top: 92%; width: 3px; height: 3px; animation: e404-floatC 17s ease-in-out infinite alternate, e404-blink 11s ease-in-out infinite; animation-delay: -15s, -4s; }
+    @keyframes e404-floatA {
+      from { transform: translate3d(0, 0, 0); }
+      to { transform: translate3d(20px, -64px, 0); }
+    }
+    @keyframes e404-floatB {
+      from { transform: translate3d(0, 0, 0); }
+      to { transform: translate3d(-24px, -50px, 0); }
+    }
+    @keyframes e404-floatC {
+      from { transform: translate3d(0, 0, 0); }
+      to { transform: translate3d(32px, -42px, 0); }
+    }
+    @keyframes e404-blink {
+      0%, 100% { opacity: 0.28; }
+      50% { opacity: 0.8; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .e404-page .globe__ring--1,
+      .e404-page .globe__ring--2,
+      .e404-page .globe__ring--3,
+      .e404-page .globe__ring--4,
+      .e404-page .globe__ring--4::after,
+      .e404-page .globe__shine,
+      .e404-star,
+      .e404-particles i {
+        animation: none;
+      }
+      .e404-particles { opacity: 0.5; }
+    }
+
+    /* Decor */
+    .e404-line {
+      position: absolute;
+      height: 1.5px;
+      z-index: 2;
+      pointer-events: none;
+      filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.38));
+    }
+    .e404-line--l1 {
+      left: calc(50% - 326px);
+      top: 347px;
+      width: 48px;
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.36) 8%, rgba(255, 255, 255, 0.84) 55%, rgba(255, 255, 255, 0.88) 100%);
+    }
+    .e404-line--l2 {
+      left: calc(50% - 314px);
+      top: 360.7px;
+      width: 33px;
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.38) 18%, rgba(255, 255, 255, 0.71) 70%, rgba(255, 255, 255, 0.73) 100%);
+    }
+    .e404-line--r1 {
+      left: calc(50% + 278px);
+      top: 343px;
+      width: 74px;
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 255, 255, 0.98) 86%, rgba(255, 255, 255, 0) 100%);
+    }
+    .e404-line--r2 {
+      left: calc(50% + 278px);
+      top: 361px;
+      width: 74px;
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.84) 0%, rgba(255, 255, 255, 0.85) 86%, rgba(255, 255, 255, 0) 100%);
+    }
+
+    .e404-star {
+      position: absolute;
+      left: calc(50% - 16px);
+      top: 326px;
+      width: 28px;
+      height: 28px;
+      z-index: 2;
+      pointer-events: none;
+      filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.18));
+    }
+    .e404-star svg { width: 100%; height: 100%; }
+
+    .e404-arc {
+      position: absolute;
+      left: calc(50% - 354px);
+      top: -206px;
+      width: 1200px;
+      height: 1200px;
+      z-index: 1;
+      pointer-events: none;
+      overflow: visible;
+    }
+    .e404-arc circle {
+      filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.7));
+    }
+
+    /* Digits 404 */
+    .e404-digits {
+      position: relative;
+      z-index: 3;
+      margin: 0;
+      font-family: "Anybody", sans-serif;
+      font-weight: 900;
+      font-variation-settings: "wdth" 128, "wght" 900;
+      font-size: clamp(96px, 17.38vw, 228px);
+      line-height: 1;
+      text-align: center;
+      letter-spacing: 0;
+      white-space: nowrap;
+      filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.14)) drop-shadow(0 2px 8px rgba(150, 190, 255, 0.45));
+    }
+    .e404-digits > span {
+      background-image: linear-gradient(180deg, #ffffff 0%, #ffffff 15%, rgb(238, 241, 246) 30%, rgb(214, 221, 231) 45%, rgb(204, 213, 225) 60%, rgb(192, 203, 217) 77%, rgb(180, 192, 207) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+    }
+    .e404-digits .e404-d0 {
+      display: inline-block;
+      margin-left: -3px;
+      margin-right: -8px;
+      font-variation-settings: "wdth" 150, "wght" 650;
+      transform: scaleX(1.034);
+      background-image: linear-gradient(180deg, #ffffff 0%, #ffffff 27%, rgb(227, 230, 237) 35%, rgb(196, 206, 214) 48%, rgb(158, 169, 180) 56%, rgb(133, 143, 156) 62%, rgb(128, 138, 152) 70%, rgb(120, 130, 144) 100%);
+    }
+
+    .e404-title {
+      position: relative;
+      z-index: 3;
+      margin-top: 36px;
+      font-family: "Montserrat", sans-serif;
+      font-weight: 800;
+      font-size: clamp(23px, 3.05vw, 40px);
+      letter-spacing: 2.5px;
+      line-height: 1;
+      text-align: center;
+      text-indent: 2.5px;
+      text-transform: uppercase;
+    }
+
+    .e404-sub {
+      position: relative;
+      z-index: 3;
+      margin-top: 20px;
+      font-size: clamp(15px, 1.464vw, 19.2px);
+      font-weight: 400;
+      letter-spacing: 0;
+      line-height: 1.40625;
+      text-align: center;
+      color: rgb(221, 227, 236);
+    }
+
+    .e404-cta {
+      position: relative;
+      z-index: 3;
+      margin-top: 41.5px;
+      display: flex;
+      justify-content: center;
+    }
+    .e404-cta .btn {
+      width: 275px;
+      height: 44px;
+      padding: 2px 31px 0 32px;
+      gap: 0;
+      justify-content: space-between;
+      font-size: 15.1px;
+      letter-spacing: 0.8px;
+      line-height: 1;
+      position: relative;
+      left: -1px;
+    }
+    .e404-cta .btn__icon { width: 21px; height: 21px; }
+
+    /* Features */
+    .e404-features {
+      position: relative;
+      z-index: 3;
+      width: min(980px, 100%);
+      margin: 95px auto 0;
+      display: grid;
+      grid-template-columns: 243.5px 246px 253.5px 237px;
+    }
+    .e404-feat {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 0 0 99px var(--pl, 0px);
+    }
+    .e404-feat:not(:first-child)::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 4px;
+      width: 1px;
+      height: 75px;
+      background: rgba(255, 255, 255, 0.385);
+    }
+    .e404-feat:nth-child(2)::before {
+      left: -0.5px;
+      width: 2px;
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.115), rgba(255, 255, 255, 0.245));
+    }
+    .e404-feat:nth-child(3)::before {
+      left: -0.5px;
+      width: 2px;
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.135), rgba(255, 255, 255, 0.125));
+    }
+    .e404-feat:nth-child(4)::before { background: rgba(255, 255, 255, 0.32); }
+    .e404-feat__icon {
+      width: 40px;
+      height: 40px;
+      margin-left: var(--il, 0px);
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .e404-feat:nth-child(1) .e404-feat__icon { transform: scale(0.9); }
+    .e404-feat:nth-child(2) .e404-feat__icon { transform: scale(0.8); }
+    .e404-feat__icon svg { width: 100%; height: 100%; display: block; }
+    .e404-feat__label {
+      min-width: 0;
+      font-size: 14.4px;
+      font-weight: 500;
+      letter-spacing: 0.05px;
+      line-height: 19.5px;
+      color: rgba(255, 255, 255, 0.88);
+    }
+    .e404-feat:nth-child(1) { --pl: 99px; --il: -7.5px; }
+    .e404-feat:nth-child(2) { --pl: 84.5px; --il: -1px; }
+    .e404-feat:nth-child(3) { --pl: 66.5px; --il: 16px; }
+    .e404-feat:nth-child(4) { --pl: 71px; --il: -7px; }
+
+    /* ---------- Footer ---------- */
+    .e404-page .footer {
+      padding: 12px 0 51px;
+      background: linear-gradient(180deg, #000000 0, #000000 1px, rgb(4, 4, 5) 1px, rgb(4, 4, 5) 2px, rgb(2, 3, 3) 2px);
+      border-top: 1px solid rgba(255, 255, 255, 0.053);
+    }
+    .e404-page .footer .container {
+      max-width: 1158px;
+      padding-left: 36px;
+      padding-right: 20px;
+    }
+    .e404-page .footer__inner {
+      gap: 0;
+      flex-wrap: nowrap;
+      align-items: center;
+    }
+    .e404-footer__left {
+      display: flex;
+      align-items: center;
+      gap: 155px;
+      min-width: 0;
+    }
+    .e404-footer__right {
+      display: flex;
+      align-items: center;
+      gap: 17px;
+      margin-left: auto;
+    }
+    .e404-page .footer .logo__img {
+      width: 45px;
+      height: 49px;
+      object-fit: fill;
+    }
+    .e404-page .footer .logo__text {
+      font-size: 16.5px;
+      letter-spacing: 2.48px;
+      line-height: 1;
+      position: relative;
+      top: 3.5px;
+    }
+    .e404-page .footer__links {
+      gap: 40.7px;
+      position: relative;
+      top: 2px;
+    }
+    .e404-page .footer__links a {
+      font-size: 11px;
+      letter-spacing: 0;
+      color: rgb(180, 188, 189);
+    }
+    .e404-page .footer__copy {
+      font-size: 11px;
+      letter-spacing: -0.12px;
+      color: rgb(170, 178, 184);
+      white-space: nowrap;
+      position: relative;
+      top: 2px;
+    }
+    .e404-soc { display: block; color: #969da3; }
+    .e404-soc svg { display: block; width: 20px; height: 20px; }
+    .e404-soc--x svg { width: 16px; height: 16px; }
+
+    /* ---------- Responsive ---------- */
+    @media (max-width: 1148px) {
+      .e404-features {
+        width: 100%;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 980px) {
+      .e404-page .hero__inner { padding-top: clamp(90px, 16vw, 239.5px); }
+      .e404-features { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .e404-feat { --pl: 24px; padding-bottom: 70px; }
+      .e404-feat__icon { --il: 0px; margin-left: 0; }
+      .e404-feat:nth-child(3)::before { display: none; }
+      .e404-page .footer .container,
+      .e404-page .header__inner { padding-left: 24px; padding-right: 24px; }
+      .e404-footer__left { gap: 60px; }
+    }
+
+    @media (max-width: 860px) {
+      .e404-page .globe {
+        display: block;
+        width: min(78vw, 460px);
+        left: calc(50% + 20px);
+        top: -70px;
+      }
+      .e404-page .hero__inner { padding-top: clamp(80px, 18vw, 200px); }
+      .e404-arc { left: calc(50% - 300px); }
+    }
+
+    @media (max-width: 640px) {
+      .e404-page .hero__inner {
+        padding-top: clamp(70px, 22vw, 150px);
+        padding-left: 18px;
+        padding-right: 18px;
+      }
+      .e404-title { margin-top: 26px; text-indent: 0; }
+      .e404-sub { margin-top: 14px; }
+      .e404-cta { margin-top: 30px; }
+      .e404-cta .btn { width: min(275px, 100%); }
+      .e404-features { margin-top: 56px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .e404-feat { --pl: 12px; padding-left: 12px; padding-bottom: 56px; gap: 6px; }
+      .e404-feat:nth-child(odd)::before { display: none; }
+      .e404-line, .e404-star, .e404-arca { display: none; }
+      .e404-page .globe { width: min(92vw, 380px); left: 50%; top: -50px; }
+      .e404-page .footer { padding-bottom: 40px; }
+      .e404-page .footer__inner { flex-direction: column; align-items: flex-start; gap: 20px; }
+      .e404-footer__left { flex-direction: column; align-items: flex-start; gap: 16px; }
+      .e404-page .footer__links { gap: 22px; }
+      .e404-footer__right { margin-left: 0; }
+    }
+  </style>
+</head>
+<body id="top" class="e404-page">
+
+  <div class="mobile-menu" id="mobileMenu">
+    <nav class="mobile-menu__nav">
+      <a href="https://bynexvpn.lol/">Главная</a>
+      <a href="https://bynexvpn.lol/#advantages">Преимущества</a>
+      <a href="https://bynexvpn.lol/#pricing">Тарифы</a>
+      <a href="/support" data-track="Поддержка">Поддержка</a>
+    </nav>
+    <div class="mobile-menu__actions">
+      <a href="https://bynexvpn.lol/" class="btn btn--outline" data-track="Войти">Войти</a>
+      <a href="https://t.me/BynexVPN_rubot" target="_blank" rel="noopener noreferrer" class="btn btn--white" data-track="Подключить VPN">Подключить</a>
+    </div>
+  </div>
+
+  <header class="header" id="header">
+    <div class="container header__inner">
+      <a href="https://bynexvpn.lol/" class="logo">
+        <img class="logo__img" src="logo.png" alt="BYNEXVPN">
+        <span class="logo__text">BYNEXVPN</span>
+      </a>
+
+      <nav class="nav">
+        <a href="https://bynexvpn.lol/" class="nav__link is-active">Главная</a>
+        <a href="https://bynexvpn.lol/#advantages" class="nav__link">Преимущества</a>
+        <a href="https://bynexvpn.lol/#pricing" class="nav__link">Тарифы</a>
+        <a href="/support" class="nav__link" data-track="Поддержка">Поддержка</a>
+      </nav>
+
+      <div class="header__actions">
+        <a href="https://bynexvpn.lol/" class="btn btn--ghost" data-track="Войти">Войти</a>
+        <a href="https://t.me/BynexVPN_rubot" target="_blank" rel="noopener noreferrer" class="btn btn--white btn--sm" data-track="Подключить VPN">Подключить</a>
+      </div>
+
+      <button class="burger" id="burger" aria-label="Меню">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero__inner">
+
+        <div class="globe" aria-hidden="true">
+          <div class="globe__sphere"><span class="globe__dots"></span></div>
+          <span class="globe__ring globe__ring--1"></span>
+          <span class="globe__ring globe__ring--2"></span>
+          <span class="globe__ring globe__ring--3"></span>
+          <span class="globe__ring globe__ring--4"></span>
+          <span class="globe__shine"></span>
+        </div>
+
+        <span class="e404-particles" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+
+        <span class="e404-line e404-line--l1" aria-hidden="true"></span>
+        <span class="e404-line e404-line--l2" aria-hidden="true"></span>
+        <span class="e404-line e404-line--r1" aria-hidden="true"></span>
+        <span class="e404-line e404-line--r2" aria-hidden="true"></span>
+
+        <span class="e404-arca" aria-hidden="true"></span>
+
+        <span class="e404-star" aria-hidden="true">
+          <svg viewBox="0 0 56 56" fill="none">
+            <path d="M28 2.5 L30.5 25.5 L53.5 28 L30.5 30.5 L28 53.5 L25.5 30.5 L2.5 28 L25.5 25.5 Z" fill="#fff"/>
+          </svg>
+        </span>
+
+        <svg class="e404-arc" viewBox="0 0 1200 1200" aria-hidden="true">
+          <circle cx="600" cy="600" r="564" pathLength="1000" fill="none"
+                  stroke="rgba(255,255,255,0.85)" stroke-width="2.5" stroke-linecap="round"
+                  stroke-dasharray="0 122.2 86.1 791.7"/>
+        </svg>
+
+        <div class="e404-digits" aria-hidden="true"><span>4</span><span class="e404-d0">0</span><span>4</span></div>
+
+        <h1 class="e404-title">Страница не найдена</h1>
+
+        <p class="e404-sub">К сожалению, запрашиваемая страница не существует<br>или была перемещена.</p>
+
+        <div class="e404-cta">
+          <a href="https://bynexvpn.lol/" class="btn btn--white" data-track="Вернуться на главную">
+            Вернуться на главную
+            <svg class="btn__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+
+        <div class="e404-features">
+          <div class="e404-feat">
+            <span class="e404-feat__icon">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M12 3l7.5 3.2v5.1c0 4.7-3.2 8.7-7.5 10.3-4.3-1.6-7.5-5.6-7.5-10.3V6.2L12 3z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M8.8 12.1l2.3 2.3 4.1-4.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+            <span class="e404-feat__label">VPN<br>подключение</span>
+          </div>
+          <div class="e404-feat">
+            <span class="e404-feat__icon">
+              <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3.1" stroke="currentColor" stroke-width="1.6"/><path d="M19.1 14.9a1.6 1.6 0 0 0 .32 1.77l.06.06a1.94 1.94 0 1 1-2.75 2.75l-.06-.06a1.6 1.6 0 0 0-1.77-.32 1.6 1.6 0 0 0-.97 1.47v.17a1.94 1.94 0 1 1-3.88 0v-.09a1.6 1.6 0 0 0-1.04-1.46 1.6 1.6 0 0 0-1.77.32l-.06.06a1.94 1.94 0 1 1-2.75-2.75l.06-.06a1.6 1.6 0 0 0 .32-1.77 1.6 1.6 0 0 0-1.47-.97H3.1a1.94 1.94 0 1 1 0-3.88h.09a1.6 1.6 0 0 0 1.46-1.04 1.6 1.6 0 0 0-.32-1.77l-.06-.06a1.94 1.94 0 1 1 2.75-2.75l.06.06a1.6 1.6 0 0 0 1.77.32h.08a1.6 1.6 0 0 0 .97-1.47V3.1a1.94 1.94 0 1 1 3.88 0v.09a1.6 1.6 0 0 0 .97 1.47 1.6 1.6 0 0 0 1.77-.32l.06-.06a1.94 1.94 0 1 1 2.75 2.75l-.06.06a1.6 1.6 0 0 0-.32 1.77v.08a1.6 1.6 0 0 0 1.47.97h.17a1.94 1.94 0 1 1 0 3.88h-.09a1.6 1.6 0 0 0-1.47.97z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+            </span>
+            <span class="e404-feat__label">Управление<br>подпиской</span>
+          </div>
+          <div class="e404-feat">
+            <span class="e404-feat__icon">
+              <svg viewBox="0 0 24 24" fill="none"><rect x="2" y="4.5" width="13.5" height="9.5" rx="1.6" stroke="currentColor" stroke-width="1.6"/><path d="M6.5 18.5h4.5M8.75 14v4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><rect x="16.5" y="9" width="5.5" height="10.5" rx="1.6" stroke="currentColor" stroke-width="1.6"/></svg>
+            </span>
+            <span class="e404-feat__label">Все устройства<br>в одном кабинете</span>
+          </div>
+          <div class="e404-feat">
+            <span class="e404-feat__icon">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M13.2 2.5L4.5 13.7h6.4l-1.1 7.8 8.7-11.2h-6.4l1.1-7.8z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+            </span>
+            <span class="e404-feat__label">Быстрый<br>доступ</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer" id="support">
+    <div class="container footer__inner">
+      <div class="e404-footer__left">
+        <a href="https://bynexvpn.lol/" class="logo">
+          <img class="logo__img" src="logo.png" alt="BYNEXVPN">
+          <span class="logo__text">BYNEXVPN</span>
+        </a>
+        <nav class="footer__links">
+          <a href="https://t.me/BynexVPN_news" target="_blank" rel="noopener noreferrer">Telegram</a>
+          <a href="/support" data-track="Поддержка">Поддержка</a>
+          <a href="#">Условия</a>
+        </nav>
+      </div>
+
+      <div class="e404-footer__right">
+        <a class="e404-soc" href="https://t.me/BynexVPN_news" target="_blank" rel="noopener noreferrer" aria-label="Telegram" data-track="Мы в телеграм">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M21.5 4.2L2.8 11.1c-.6.2-.6 1.1.1 1.3l4.7 1.4 1.8 5.4c.2.6 1 .8 1.5.3l2.5-2.5 4.6 3.4c.5.4 1.3.1 1.5-.6l2.9-13.7c.2-.8-.6-1.4-1.3-1.1z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M7.6 13.8L18.6 6.6l-8.3 8.3-.2 3.8" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+        </a>
+        <span class="e404-soc e404-soc--x" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.451-6.231zm-1.161 17.52h1.833L7.084 4.126H5.117l11.966 15.644z"/></svg>
+        </span>
+        <p class="footer__copy">BYNEXVPN. Все права защищены.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      var b = document.getElementById('burger'), m = document.getElementById('mobileMenu');
+      if (b && m) {
+        b.addEventListener('click', function () {
+          b.classList.toggle('is-open');
+          m.classList.toggle('is-open');
+        });
+      }
+      var h = document.getElementById('header');
+      window.addEventListener('scroll', function () {
+        if (window.scrollY > 10) h.classList.add('is-scrolled');
+        else h.classList.remove('is-scrolled');
+      }, { passive: true });
+    })();
+  </script>
+  <script src="supabase-config.js"></script>
+  <script src="analytics.js"></script>
+</body>
+</html>
