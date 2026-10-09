@@ -234,6 +234,63 @@
     return !!(CFG.url && CFG.key && String(CFG.url).indexOf("YOUR_PROJECT") === -1);
   }
 
+  /* ================= ДИАГНОСТИКА ОШИБОК SUPABASE =================
+     Одна классификация на всю админ-панель (admin.js + support.js).
+     kind: config | network | auth | permission | missing | unknown
+     Правило: сетевой категорией помечается только реально сетевой сбой;
+     полученный от сервера ответ (401/403/404, код SQLSTATE) классифицируется
+     по содержимому, а не по общему слову «ошибка».                */
+
+  function errText(e) {
+    if (!e) return "";
+    if (typeof e === "string") return e;
+    return String(e.message || e.error_description || e.error || e.hint || "");
+  }
+
+  function classifySupa(err, stage) {
+    var status = err && (err.status || err.statusCode) || null;
+    var code = err && err.code ? String(err.code) : "";
+    var msg = errText(err);
+    var name = err && err.name ? String(err.name) : "";
+    var lower = (msg + " " + name).toLowerCase();
+
+    var d = { stage: stage || "", kind: "unknown", status: status, code: code, text: "", detail: "" };
+
+    if (!CFG.url || !CFG.key || String(CFG.url).indexOf("YOUR_PROJECT") !== -1) {
+      d.kind = "config";
+      d.text = "Supabase не настроен: заполните supabase-config.js";
+    } else if (/failed to fetch|fetch failed|networkerror|network error|load failed|network request failed/.test(lower) ||
+               (name === "TypeError" && /fetch|network/.test(lower))) {
+      d.kind = "network";
+      d.text = "Сеть недоступна: сервер Supabase не отвечает (это не ошибка ключа).";
+    } else if (code === "42501" || status === 403 || /permission denied|row-level security/.test(lower)) {
+      d.kind = "permission";
+      d.text = "Нет прав (RLS): запрос отклонён политикой доступа для текущей роли.";
+    } else if (code === "PGRST301" || status === 401 ||
+               /jwt expired|invalid token|refresh token|not authorized|invalid login credentials|email not confirmed/.test(lower)) {
+      d.kind = "auth";
+      d.text = "Сессия Supabase истекла или недействительна.";
+    } else if (code === "PGRST205" || status === 404 ||
+               /does not exist|could not find the table|relation .* does not exist/.test(lower)) {
+      d.kind = "missing";
+      d.text = "Таблица не найдена в проекте Supabase — выполните SQL-схему.";
+    } else {
+      d.text = "Ошибка Supabase" + (status ? " (HTTP " + status + ")" : "") + (msg ? ": " + msg.slice(0, 140) : "");
+    }
+
+    d.detail = "stage=" + (d.stage || "-") + " kind=" + d.kind +
+      " status=" + (d.status === null ? "-" : d.status) + " code=" + (d.code || "-");
+    return d;
+  }
+
+  function supaLog(err, stage) {
+    var d = classifySupa(err, stage);
+    try { console.error("[supabase] " + d.detail, err); } catch (e) {}
+    return d;
+  }
+
+  window.BX_SUPA_DIAG = { classify: classifySupa, log: supaLog };
+
   function api(filters) {
     var base = String(CFG.url).replace(/\/$/, "");
     var url = base + "/rest/v1/events?select=visitor_id,session_id,type,page,label,country,referrer,device,created_at&" +
@@ -245,8 +302,16 @@
         Accept: "application/json"
       }
     }).then(function (r) {
-      if (!r.ok) return r.text().then(function (t) { throw new Error("Supabase " + r.status + ": " + t.slice(0, 160)); });
-      return r.json();
+      if (r.ok) return r.json();
+      return r.text().then(function (t) {
+        var payload = {};
+        try { payload = JSON.parse(t); } catch (e) {}
+        var e2 = new Error(payload.message || payload.error_description || t.slice(0, 160) || ("HTTP " + r.status));
+        e2.status = r.status;
+        e2.code = payload.code || "";
+        e2.hint = payload.hint || "";
+        throw e2;
+      });
     });
   }
 
@@ -1138,8 +1203,9 @@
         msg.className = "set-msg ok";
         msg.textContent = "Данные обновлены";
       }).catch(function (err) {
+        var d = supaLog(err, "stats-refresh");
         msg.className = "set-msg err";
-        msg.textContent = "Ошибка: " + err.message;
+        msg.textContent = "Ошибка: " + d.text + " [" + d.detail + "]";
       });
     });
 
@@ -1213,9 +1279,10 @@
       renderCurrent();
     }).catch(function (err) {
       state.loading = false;
+      var d = supaLog(err, "stats");
       var n = $("errorNotice");
       n.hidden = false;
-      n.textContent = "Не удалось загрузить статистику: " + err.message;
+      n.textContent = "Не удалось загрузить статистику: " + d.text + " [" + d.detail + "]";
     });
   }
 
@@ -1333,7 +1400,7 @@
       var hbFrom = new Date(Date.now() - 24 * 3600e3);
       api("type=eq.heartbeat&created_at=gte." + hbFrom.toISOString() + "&order=created_at.desc")
         .then(function (rows) { state.hb24 = rows; if (state.view === "dashboard") renderActiveCard(); })
-        .catch(function () {});
+        .catch(function (e) { supaLog(e, "hb24"); });
       $("lastUpdate").textContent = fmtDate(new Date()) + " " + fmtTime(new Date());
     }, 60000);
   }

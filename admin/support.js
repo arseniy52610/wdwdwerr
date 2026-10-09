@@ -33,6 +33,55 @@
 
   var sb = null;
 
+  /* ---- диагностика ошибок (классификатор общий с admin.js) ---- */
+
+  function classify(err, stage) {
+    if (window.BX_SUPA_DIAG && typeof window.BX_SUPA_DIAG.classify === "function") {
+      return window.BX_SUPA_DIAG.classify(err, stage);
+    }
+    var msg = err && err.message ? String(err.message) : "";
+    return {
+      stage: stage || "", kind: "unknown", status: null, code: "",
+      text: "Ошибка Supabase" + (msg ? ": " + msg.slice(0, 140) : ""),
+      detail: "stage=" + (stage || "-") + " kind=unknown"
+    };
+  }
+
+  function logDiag(err, stage) {
+    var d = classify(err, stage);
+    try { console.error("[support-admin] " + d.detail, err); } catch (e) {}
+    return d;
+  }
+
+  /* Убираем локально сломанную сессию, чтобы не зациклить ошибку входа.
+     Серверные токены не отзываем — чужих сессий это не касается. */
+  function clearLocalSession() {
+    try {
+      if (sb && sb.auth && typeof sb.auth.signOut === "function") {
+        var p = sb.auth.signOut({ scope: "local" });
+        if (p && typeof p.catch === "function") p.catch(function () {});
+      }
+    } catch (e) {}
+    try { window.localStorage && localStorage.removeItem("bx_support_ops"); } catch (e) {}
+    ST.session = null;
+    ST.uid = null;
+    ST.isOp = false;
+  }
+
+  /* Единая точка показа ошибок входа/проверки оператора:
+     текст всегда соответствует реальной причине, а не «подключению». */
+  function handleStageError(stage, err) {
+    var d = logDiag(err, stage);
+    if (d.kind === "auth") clearLocalSession();
+    var tail = d.kind === "auth" ? " Войдите заново." : "";
+    showGate(d.text + tail + " [" + d.detail + "]");
+  }
+
+  function alertStage(prefix, err, stage) {
+    var d = logDiag(err, stage);
+    alert(prefix + ": " + d.text);
+  }
+
   function rootEl() { return document.querySelector('.view[data-view="support"]'); }
 
   function esc(s) {
@@ -92,6 +141,18 @@
       "</div>";
   }
 
+  function signInErrorText(err) {
+    var m = err && err.message ? String(err.message) : "";
+    var low = m.toLowerCase();
+    if (/invalid login credentials|invalid credentials/.test(low)) return "Неверный e-mail или пароль";
+    if (/email not confirmed/.test(low)) return "E-mail не подтверждён — подтвердите письмо от Supabase.";
+    if (/rate limit|too many requests|security purposes/.test(low)) return "Слишком много попыток. Подождите минуту.";
+    var d = classify(err, "sign-in");
+    if (d.kind === "network") return d.text;
+    if (m) return "Не удалось войти: " + m.slice(0, 80);
+    return "Не удалось войти.";
+  }
+
   function wireGate() {
     var msg = $("sgMsg");
     function go() {
@@ -102,16 +163,18 @@
       msg.textContent = "Входим…";
       sb.auth.signInWithPassword({ email: m, password: p }).then(function (r) {
         if (r.error) {
+          logDiag(r.error, "sign-in");
           msg.className = "set-msg err";
-          msg.textContent = "Неверный e-mail или пароль";
+          msg.textContent = signInErrorText(r.error);
           return;
         }
         ST.session = r.data.session;
         ST.uid = r.data.session.user.id;
         verifyOperator();
       }).catch(function (e) {
+        logDiag(e, "sign-in");
         msg.className = "set-msg err";
-        msg.textContent = "Ошибка подключения: " + (e && e.message ? e.message.slice(0, 80) : "");
+        msg.textContent = signInErrorText(e);
       });
     }
     $("sgIn").addEventListener("click", go);
@@ -126,10 +189,11 @@
 
   function verifyOperator() {
     return sb.from("support_operators").select("user_id,name").eq("user_id", ST.uid).maybeSingle().then(function (r) {
-      if (r.error) throw r.error;
+      if (r.error) { handleStageError("operator-check", r.error); return false; }
       if (!r.data) {
         ST.isOp = false;
-        showGate("Пользователь " + (ST.session.user.email || "") + " не добавлен в операторы. " +
+        var em = (ST.session && ST.session.user && ST.session.user.email) || "";
+        showGate("Пользователь " + em + " не добавлен в операторы. " +
           "Выполните в SQL Editor: insert into public.support_operators (user_id, name) values ('" + ST.uid + "', 'Оператор');");
         return false;
       }
@@ -144,6 +208,9 @@
         }
       });
       return true;
+    }).catch(function (e) {
+      handleStageError("operator-check", e);
+      return false;
     });
   }
 
@@ -255,16 +322,16 @@
     $("supStatusSel").addEventListener("change", function () {
       if (!ST.open) return;
       var v = $("supStatusSel").value;
-      sb.rpc("support_set_status", { p_conversation_id: ST.open.id, p_status: v }).catch(function () {
-        alert("Не удалось изменить статус");
+      sb.rpc("support_set_status", { p_conversation_id: ST.open.id, p_status: v }).catch(function (e) {
+        alertStage("Не удалось изменить статус", e, "set-status");
       });
     });
 
     $("supClose").addEventListener("click", function () {
       if (!ST.open) return;
       var next = ST.open.status === "closed" ? "operator_active" : "closed";
-      sb.rpc("support_set_status", { p_conversation_id: ST.open.id, p_status: next }).catch(function () {
-        alert("Не удалось изменить статус");
+      sb.rpc("support_set_status", { p_conversation_id: ST.open.id, p_status: next }).catch(function (e) {
+        alertStage("Не удалось изменить статус", e, "set-status");
       });
     });
 
@@ -384,7 +451,17 @@
         return loadPreviews();
       })
       .catch(function (e) {
-        console.error("[support-admin]", e);
+        var d = logDiag(e, "load-conversations");
+        var box = $("supItems");
+        if (box) {
+          box.textContent = "";
+          var p = document.createElement("p");
+          p.className = "sup__none";
+          p.textContent = "Не удалось загрузить обращения: " + d.text + " [" + d.detail + "]";
+          box.appendChild(p);
+        }
+        var none = $("supListNone");
+        if (none) none.hidden = true;
       });
   }
 
@@ -420,9 +497,10 @@
     for (var i = 0; i < ST.convs.length; i++) if (ST.convs[i].id === id) c = ST.convs[i];
     if (!c) {
       sb.from("support_conversations").select("*").eq("id", id).maybeSingle().then(function (r) {
-        if (r.data) { ST.convs.unshift(r.data); renderList(); openConv(id); }
-        else alert("Обращение не найдено или доступ закрыт");
-      });
+        if (r.data) { ST.convs.unshift(r.data); renderList(); openConv(id); return; }
+        if (r.error) { alertStage("Не удалось открыть обращение", r.error, "open-conversation"); return; }
+        alert("Обращение не найдено или доступ закрыт");
+      }).catch(function (e) { alertStage("Не удалось открыть обращение", e, "open-conversation"); });
       return;
     }
 
@@ -453,7 +531,21 @@
         paintMsgs();
         scrollMsgs(false);
       })
-      .catch(function (e) { console.error("[support-admin]", e); });
+      .catch(function (e) {
+        if (!ST.open || ST.open.id !== c.id) return;
+        var d = logDiag(e, "load-messages");
+        var box = $("supMsgs");
+        if (box) {
+          box.textContent = "";
+          var wrap = document.createElement("div");
+          wrap.className = "sup__m sup__m--sys";
+          var b = document.createElement("div");
+          b.className = "sup__b";
+          b.textContent = "Не удалось загрузить сообщения: " + d.text + " [" + d.detail + "]";
+          wrap.appendChild(b);
+          box.appendChild(wrap);
+        }
+      });
 
     renderList();
   }
@@ -580,8 +672,7 @@
       t.value = text;
       autoGrow();
       updateSend();
-      console.error("[support-admin]", e);
-      alert("Не удалось отправить ответ");
+      alertStage("Не удалось отправить ответ", e, "reply");
     });
   }
 
@@ -630,8 +721,12 @@
   /* ---------------- render() ---------------- */
 
   function render() {
-    if (!CFG.url || !CFG.key || typeof supabase === "undefined") {
-      rootEl().innerHTML = '<div class="card"><p>Supabase не подключён — раздел поддержки недоступен.</p></div>';
+    if (!CFG.url || !CFG.key) {
+      rootEl().innerHTML = '<div class="card"><p>Supabase не настроен: заполните файл supabase-config.js в корне сайта.</p></div>';
+      return;
+    }
+    if (typeof supabase === "undefined" || !supabase.createClient) {
+      rootEl().innerHTML = '<div class="card"><p>Библиотека supabase-js не загрузилась — проверьте доступность CDN jsdelivr.</p></div>';
       return;
     }
     if (!sb) {
@@ -649,17 +744,26 @@
 
     rootEl().innerHTML = '<div class="sup-loading">Проверка доступа…</div>';
 
+    // Этап «session» — чтение/обновление локальной сессии.
+    // Этап «operator-check» — запрос к БД; его сбои обрабатывает сам
+    // verifyOperator, чтобы не смешивать «нет сессии», «нет прав» и «нет сети».
     sb.auth.getSession().then(function (r) {
-      if (r.data && r.data.session) {
-        ST.session = r.data.session;
-        ST.uid = r.data.session.user.id;
-        return verifyOperator();
+      var sess = r && r.data ? r.data.session : null;
+      if (!sess) {
+        if (r && r.error) {
+          var d = classify(r.error, "session");
+          if (d.kind === "network") { handleStageError("session", r.error); return false; }
+          logDiag(r.error, "session");
+        }
+        showGate("");
+        return false;
       }
-      showGate("");
-      return false;
+      ST.session = sess;
+      ST.uid = sess.user.id;
+      return verifyOperator();
     }).catch(function (e) {
-      console.error("[support-admin]", e);
-      showGate("Ошибка подключения к Supabase");
+      handleStageError("session", e);
+      return false;
     });
   }
 
