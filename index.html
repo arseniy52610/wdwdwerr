@@ -2,36 +2,64 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#08090f">
-  <meta name="description" content="Личный кабинет BYNEXVPN скоро будет доступен.">
-  <title>Личный кабинет скоро будет доступен — BYNEXVPN</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#050506">
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script>(function(){
+    try{
+      var t=localStorage.getItem("bx_theme")==="light"?"light":"dark";
+      document.documentElement.setAttribute("data-theme",t);
+      var m=document.querySelector('meta[name="theme-color"]');
+      if(m)m.setAttribute("content",t==="light"?"#f2f3f5":"#050506");
+      if(window.Telegram && window.Telegram.WebApp){
+        var tg=window.Telegram.WebApp;
+        tg.expand();
+        tg.ready();
+        if(tg.themeParams && tg.themeParams.bg_color) m.setAttribute("content","#"+tg.themeParams.bg_color);
+      }
+    }catch(e){}
+  })();</script>
+  <meta name="robots" content="noindex, nofollow">
   <link rel="icon" type="image/png" href="logo.png">
+  <title>Личный кабинет — BYNEXVPN</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <style>
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    :root{--bg:#050506;--text:#ffffff;--muted:#8b8b95;--line:rgba(255,255,255,0.08);--line-strong:rgba(255,255,255,0.14);--green:#35d07f}
+    [data-theme="light"]{--bg:#f2f3f5;--text:#0a0a0c;--muted:#5b5b65;--line:rgba(10,10,12,0.09);--line-strong:rgba(10,10,12,0.16);--green:#16a34a}
+    html,body{height:100%;font-family:"Inter","Segoe UI",sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;-webkit-text-size-adjust:100%}
+    .tg-wrap{min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:16px;position:relative;overflow:hidden}
+    .tg-wrap::before{content:"";position:fixed;inset:0;z-index:-1;background:radial-gradient(600px 360px at 50% -10%,rgba(96,130,255,.16),transparent 65%),radial-gradient(480px 320px at 90% 110%,rgba(0,201,255,.10),transparent 62%),var(--bg)}
+    [data-theme="light"] .tg-wrap::before{background:radial-gradient(600px 360px at 50% -10%,rgba(96,130,255,.18),transparent 65%),radial-gradient(480px 320px at 90% 110%,rgba(0,201,255,.12),transparent 62%),var(--bg)}
+    .tg-card{width:100%;max-width:380px;border:1px solid var(--line-strong);border-radius:20px;background:rgba(10,10,12,.9);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);padding:28px 22px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:16px;box-shadow:0 40px 80px -40px rgba(0,0,0,.9)}
+    [data-theme="light"] .tg-card{background:rgba(255,255,255,.94);box-shadow:0 40px 80px -40px rgba(10,10,40,.4)}
+    .tg-logo{width:56px;height:56px;border-radius:14px;border:1px solid var(--line-strong);background:rgba(255,255,255,.04);display:flex;align-items:center;justify-content:center}
+    [data-theme="light"] .tg-logo{background:rgba(10,10,12,.04)}
+    .tg-logo img{width:34px;height:34px;display:block}
+    .tg-chip{display:inline-flex;align-items:center;gap:8px;padding:7px 14px;border-radius:999px;border:1px solid var(--line-strong);background:rgba(255,255,255,.04);font-size:12px;font-weight:600}
+    [data-theme="light"] .tg-chip{background:rgba(10,10,12,.04)}
+    .tg-chip-dot{width:7px;height:7px;border-radius:50%;background:#fff;box-shadow:0 0 8px rgba(255,255,255,.9);animation:pulse 1.8s ease-in-out infinite}
+    [data-theme="light"] .tg-chip-dot{background:var(--green);box-shadow:0 0 8px rgba(22,163,74,.7)}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+    .tg-title{font-size:clamp(22px,6vw,28px);font-weight:800;letter-spacing:-.02em;line-height:1.15}
+    .tg-text{font-size:15px;font-weight:600}
+    .tg-sub{font-size:14px;line-height:1.7;color:var(--muted);max-width:300px}
+    @media(min-width:680px){.tg-card{padding:34px 30px;gap:18px}}
+  </style>
 </head>
-<body class="cabinet-soon-page">
-  <main class="soon">
-    <a class="soon__brand" href="index.html" aria-label="BYNEXVPN — на главную">
-      <img src="logo.png" alt="" class="soon__logo">
-      <span>Bynex<span class="soon__accent">VPN</span></span>
-    </a>
-    <section class="soon__panel" aria-labelledby="soon-title">
-      <div class="soon__icon" aria-hidden="true">
-        <svg viewBox="0 0 64 64" fill="none">
-          <path d="M32 6 53 14v16c0 14-8.8 23.2-21 29C19.8 53.2 11 44 11 30V14L32 6Z" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>
-          <path d="M23 32.5 29 38l12-13" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
+<body>
+  <main class="tg-wrap">
+    <div class="tg-card">
+      <div class="tg-logo">
+        <img src="logo.png" alt="BYNEXVPN">
       </div>
-      <span class="soon__eyebrow"><i></i> BYNEXVPN • В РАЗРАБОТКЕ</span>
-      <h1 id="soon-title">Личный кабинет<br><span>скоро будет доступен!</span></h1>
-      <p class="soon__description">Мы готовим для вас удобный личный кабинет. Совсем скоро здесь появятся управление подпиской и другие возможности BYNEXVPN.</p>
-      <div class="soon__status"><span class="soon__pulse"></span><span>Работаем над запуском</span></div>
-      <a class="soon__button" href="index.html">Вернуться на главную <span aria-hidden="true">↗</span></a>
-    </section>
-    <p class="soon__footer">© BYNEXVPN <span>·</span> Ваш интернет — под защитой</p>
+      <span class="tg-chip"><span class="tg-chip-dot"></span>В разработке</span>
+      <h1 class="tg-title">Личный кабинет</h1>
+      <p class="tg-text">Личный кабинет разрабатывают наши разработчики</p>
+      <p class="tg-sub">Скоро здесь появится удобное управление подпиской, подключением и устройствами прямо в Telegram Mini App.</p>
+    </div>
   </main>
 </body>
 </html>
